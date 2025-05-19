@@ -1,0 +1,9 @@
+# MongoDB 설정
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/eatmoji
+
+# GPT FastAPI 서버 설정
+gpt:
+  url: http://localhost:8000/gpt/recommendation

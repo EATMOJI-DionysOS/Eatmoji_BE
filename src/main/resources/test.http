@@ -1,0 +1,10 @@
+###
+
+# curl -X POST http://localhost:8080/api/recommend -H "Content-Type: application/json" -d "\"😄\""
+POST http://localhost:8080/api/recommend
+Content-Type: application/json
+
+"😍"
+
+###
+

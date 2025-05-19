@@ -1,0 +1,62 @@
+{
+  "😍": {
+    "emotion": "joy",
+    "intensity": 0.73
+  },
+  "😭": {
+    "emotion": "sad",
+    "intensity": 0.655
+  },
+  "😊": {
+    "emotion": "joy",
+    "intensity": 0.704
+  },
+  "😒": {
+    "emotion": "anger",
+    "intensity": 0.591
+  },
+  "😡": {
+    "emotion": "anger",
+    "intensity": 0.533
+  },
+  "😢": {
+    "emotion": "sad",
+    "intensity": 0.587
+  },
+  "😌": {
+    "emotion": "calm",
+    "intensity": 0.624
+  },
+  "😆": {
+    "emotion": "joy",
+    "intensity": 0.565
+  },
+  "😀": {
+    "emotion": "joy",
+    "intensity": 0.656
+  },
+  "😥": {
+    "emotion": "sad",
+    "intensity": 0.66
+  },
+  "😑": {
+    "emotion": "anger",
+    "intensity": 0.515
+  },
+  "😠": {
+    "emotion": "anger",
+    "intensity": 0.566
+  },
+  "😐": {
+    "emotion": "calm",
+    "intensity": 0.556
+  },
+  "😷": {
+    "emotion": "sick",
+    "intensity": 0.476
+  },
+  "😇": {
+    "emotion": "calm",
+    "intensity": 0.667
+  }
+}

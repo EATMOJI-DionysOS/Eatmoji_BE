@@ -36,3 +36,13 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Python virtual environments
+venv/
+.venv/
+env/
+.env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

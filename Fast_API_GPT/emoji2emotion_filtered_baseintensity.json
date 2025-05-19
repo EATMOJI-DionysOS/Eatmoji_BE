@@ -51,6 +51,10 @@
     "emotion": "calm",
     "intensity": 0.556
   },
+  "😷": {
+    "emotion": "sick",
+    "intensity": 0.476
+  },
   "😇": {
     "emotion": "calm",
     "intensity": 0.667

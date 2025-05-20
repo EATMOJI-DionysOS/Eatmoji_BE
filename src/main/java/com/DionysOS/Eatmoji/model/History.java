@@ -21,23 +21,15 @@ public class History {
     private String emotion;
 
     @NotNull
-    private double intensity;
-
-    @NotNull
     private String food;
-
-    @NotNull
-    private String reason;
 
     @NotNull
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public History(String email, String emotion, double intensity, String food, String reason, LocalDateTime createdAt) {
+    public History(String email, String emotion, String food, LocalDateTime createdAt) {
         this.email = email;
         this.emotion = emotion;
-        this.intensity = intensity;
         this.food = food;
-        this.reason = reason;
         this.createdAt = createdAt;
     }
 

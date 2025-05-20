@@ -29,9 +29,7 @@ public class HistoryRepositoryTest {
         History history = new History(
                 "user@example.com",
                 "기쁨",
-                0.95,
                 "비빔밥",
-                "스트레스를 날려버릴 매콤한 음식",
                 LocalDateTime.now()
         );
 

@@ -5,6 +5,7 @@ import com.DionysOS.Eatmoji.model.User;
 import com.DionysOS.Eatmoji.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -15,13 +16,19 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignupRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             return ResponseEntity.badRequest().body("Email already exists");
         }
 
-        User user = new User(request.getEmail(), request.getPassword());
+        String hashedPassword = passwordEncoder.encode(request.getPassword());
+
+        User user = new User(request.getEmail(), hashedPassword);
 
         userRepository.save(user);
         return ResponseEntity.ok(SignupResponse.builder().email(user.getEmail()).message("Signup successful!").build());
@@ -31,7 +38,7 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         return userRepository.findByEmail(request.getEmail())
                 .map(user -> {
-                    if (user.getPassword().equals(request.getPassword())) {
+                    if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
                         return ResponseEntity.ok(LoginResponse.builder().email(user.getEmail()).message("Login successful!").build());
                     } else {
                         return ResponseEntity.status(401).body("Invalid password");

@@ -36,6 +36,7 @@ dependencies {
 	implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
 	implementation 'software.amazon.awssdk:s3:2.25.2'
 	implementation 'io.github.cdimascio:dotenv-java:3.0.0'
+	implementation 'com.opencsv:opencsv:5.9'
 }
 
 tasks.named('test') {

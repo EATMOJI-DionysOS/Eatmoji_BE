@@ -8,7 +8,7 @@ spring:
 gpt:
   url: http://localhost:8000/gpt/recommendation
 
-
+# AWS S3 설정
 cloud:
   aws:
     credentials:

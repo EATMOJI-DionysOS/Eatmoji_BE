@@ -18,3 +18,4 @@ cloud:
       static: ${REGION}
     s3:
       bucket: ${S3_BUCKET_NAME}
+      filename: ${FILE_NAME}

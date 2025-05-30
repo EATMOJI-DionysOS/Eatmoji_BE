@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class AuthResponse {
+public class LoginResponse {
     private String email;
     private String message;
 }

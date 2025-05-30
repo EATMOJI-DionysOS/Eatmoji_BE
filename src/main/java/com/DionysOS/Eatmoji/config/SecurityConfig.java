@@ -10,16 +10,16 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    @Bean // TODO: Login과 Signup의 public access를 위한 securityFilterChain. 나중에 수정 거칠 것.
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF for API usage
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()  // allow everything starting with /auth/
-                        .anyRequest().authenticated()            // secure everything else
-                )
-                .build();
-    }
+     // TODO: 현재 이 SecurityConfig는 모든 요청을 허용하고 있음. 나중에 인증 및 권한 설정을 추가해야 함.
+     @Bean
+     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+         return http
+                 .csrf(csrf -> csrf.disable()) // disable CSRF for API clients
+                 .authorizeHttpRequests(auth -> auth
+                         .anyRequest().permitAll()                     // allow all requests
+                 )
+                 .build();
+     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

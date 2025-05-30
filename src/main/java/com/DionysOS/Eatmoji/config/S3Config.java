@@ -1,19 +1,27 @@
 package com.DionysOS.Eatmoji.config;
 
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.s3.S3Client;
 
 @Configuration
 public class S3Config {
 
     @Bean
-    public S3Client s3Client() {
-        return S3Client.builder()
-                .region(Region.of(System.getenv("REGION")))
-                .credentialsProvider(EnvironmentVariableCredentialsProvider.create())
+    public AmazonS3 amazonS3() {
+        Dotenv dotenv = Dotenv.load();
+        BasicAWSCredentials credentials = new BasicAWSCredentials(
+                dotenv.get("AWS_ACCESS_KEY_ID"),
+                dotenv.get("AWS_SECRET_ACCESS_KEY")
+        );
+
+        return AmazonS3ClientBuilder.standard()
+                .withRegion(dotenv.get("REGION"))
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
                 .build();
     }
 }

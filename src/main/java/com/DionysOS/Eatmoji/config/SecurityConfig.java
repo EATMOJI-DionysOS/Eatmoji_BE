@@ -14,10 +14,13 @@ public class SecurityConfig {
      @Bean
      public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
          return http
-                 .csrf(csrf -> csrf.disable()) // disable CSRF for API clients
+                 .csrf(csrf -> csrf.disable())
                  .authorizeHttpRequests(auth -> auth
-                         .anyRequest().permitAll()                     // allow all requests
+                         .requestMatchers("/auth/**").permitAll()
+                         .anyRequest().authenticated()
                  )
+                 .formLogin(form -> form.disable()) // disable default login
+                 .securityContext(security -> security.requireExplicitSave(false)) // let it persist automatically
                  .build();
      }
 

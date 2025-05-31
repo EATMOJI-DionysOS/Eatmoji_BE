@@ -5,6 +5,7 @@ import com.DionysOS.Eatmoji.dto.UserProfileRequest;
 import com.DionysOS.Eatmoji.dto.UserProfileResponse;
 import com.DionysOS.Eatmoji.repository.UserRepository;
 import com.DionysOS.Eatmoji.model.User;
+import com.DionysOS.Eatmoji.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,18 +21,12 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    private String getCurrentUserEmail() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            return ((UserDetails) principal).getUsername(); // return the email
-        }
-        return principal.toString(); // fallback
-    }
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/profile")
     public ResponseEntity<?> getProfile() {
-        String email = getCurrentUserEmail();
-        Optional<User> userOpt = userRepository.findByEmail(email);
+        Optional<User> userOpt = userService.getCurrentUser();
         if (userOpt.isEmpty()) return ResponseEntity.notFound().build();
 
         User user = userOpt.get();
@@ -47,8 +42,8 @@ public class UserController {
 
     @PatchMapping("/profile")
     public ResponseEntity<?> updateProfile(@RequestBody UserProfileRequest request) {
-        String email = getCurrentUserEmail();
-        Optional<User> userOpt = userRepository.findByEmail(email);
+
+        Optional<User> userOpt = userService.getCurrentUser();
         if (userOpt.isEmpty()) return ResponseEntity.notFound().build();
 
         User user = userOpt.get();

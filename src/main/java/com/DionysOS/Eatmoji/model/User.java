@@ -10,6 +10,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Document(collection = "users")
 public class User {
@@ -24,16 +27,16 @@ public class User {
     private String password;
 
     @Setter
-    private String category; // 선호하는 음식 종류 (한식 / 중식 / 일식 / 양식 등)
+    private List<String> category; // 선호하는 음식 종류 (한식 / 중식 / 일식 / 양식 등)
 
     @Setter
-    private String flavor; // 선호하는 맛 (매운맛 / 단맛 등)
+    private List<String> flavor; // 선호하는 맛 (매운맛 / 단맛 등)
 
     @Setter
-    private String disease; // 질병 정보 (고혈압 / 당뇨 등)
+    private List<String> disease; // 질병 정보 (고혈압 / 당뇨 등)
 
     @Setter
-    private String allergy; // 알레르기 정보 (우유 / 계란 등)
+    private List<String> allergy; // 알레르기 정보 (우유 / 계란 등)
 
     public User(String email, String password) {
         this.email = email;

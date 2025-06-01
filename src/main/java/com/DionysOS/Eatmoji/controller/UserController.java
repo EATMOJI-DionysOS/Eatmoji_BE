@@ -42,15 +42,12 @@ public class UserController {
 
     @PatchMapping("/profile")
     public ResponseEntity<?> updateProfile(@RequestBody UserProfileRequest request) {
-
         Optional<User> userOpt = userService.getCurrentUser();
         if (userOpt.isEmpty()) return ResponseEntity.notFound().build();
 
         User user = userOpt.get();
-        user.setCategory(request.getCategory());
-        user.setFlavor(request.getFlavor());
-        user.setDisease(request.getDisease());
-        user.setAllergy(request.getAllergy());
+
+        userService.updateUserProfile(user, request);
 
         userRepository.save(user);
         return ResponseEntity.ok("User Profile updated successfully!");

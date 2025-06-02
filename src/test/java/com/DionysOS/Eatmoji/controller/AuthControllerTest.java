@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
@@ -29,6 +30,9 @@ public class AuthControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @BeforeEach
     void setUp() { userRepository.deleteAll(); } // cleaning up before each test.
@@ -51,7 +55,7 @@ public class AuthControllerTest {
     @Test
     void testSignupDuplicateEmail() throws Exception {
         // First signup
-        userRepository.save(new User("test12@example.com", "pass123"));
+        userRepository.save(new User("test12@example.com", passwordEncoder.encode("pass123")));
 
         // Attempt to signup with the same email
         SignupRequest request = new SignupRequest();
@@ -67,7 +71,7 @@ public class AuthControllerTest {
 
     @Test
     void testLoginSuccess() throws Exception {
-        userRepository.save(new User("test333@example.com", "password123"));
+        userRepository.save(new User("test333@example.com", passwordEncoder.encode("password123")));
 
         mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -79,7 +83,7 @@ public class AuthControllerTest {
 
     @Test
     void testLoginInvalidPassword() throws Exception {
-        userRepository.save(new User("test4444@example.com", "correctpassword1"));
+        userRepository.save(new User("test4444@example.com", passwordEncoder.encode("correctpassword1")));
 
         mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)

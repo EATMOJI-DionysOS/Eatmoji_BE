@@ -3,9 +3,17 @@ package com.DionysOS.Eatmoji.controller;
 import com.DionysOS.Eatmoji.dto.*;
 import com.DionysOS.Eatmoji.model.User;
 import com.DionysOS.Eatmoji.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -15,28 +23,48 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignupRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().body("Email already exists");
+            return ResponseEntity.badRequest().body("Email already exists! Please use a different email.");
         }
 
-        User user = new User(request.getEmail(), request.getPassword());
+        String hashedPassword = passwordEncoder.encode(request.getPassword());
+
+        User user = new User(request.getEmail(), hashedPassword);
 
         userRepository.save(user);
         return ResponseEntity.ok(SignupResponse.builder().email(user.getEmail()).message("Signup successful!").build());
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        return userRepository.findByEmail(request.getEmail())
-                .map(user -> {
-                    if (user.getPassword().equals(request.getPassword())) {
-                        return ResponseEntity.ok(LoginResponse.builder().email(user.getEmail()).message("Login successful!").build());
-                    } else {
-                        return ResponseEntity.status(401).body("Invalid password");
-                    }
-                }).orElse(ResponseEntity.status(404).body("User not found"));
+    public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletRequest httpRequest) {
+        Optional<User> user = userRepository.findByEmail(request.getEmail());
+
+        if (user.isPresent() && passwordEncoder.matches(request.getPassword(), user.get().getPassword())) {
+
+            // Store in Spring Security context
+            List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
+            UsernamePasswordAuthenticationToken authToken =
+                    new UsernamePasswordAuthenticationToken(user.get().getEmail(), null, authorities);
+
+            SecurityContextHolder.getContext().setAuthentication(authToken);
+
+            // Also set session (so it persists in future requests)
+            httpRequest.getSession(true); // create session
+
+            return ResponseEntity.ok(LoginResponse.builder()
+                    .email(user.get().getEmail())
+                    .message("Login successful!")
+                    .build());
+        }
+
+        return ResponseEntity.status(401).body("Invalid email or password! Please try again.");
     }
+
 
 }

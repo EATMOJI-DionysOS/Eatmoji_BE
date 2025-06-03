@@ -27,7 +27,7 @@ public class RecipeSearchService {
         try {
             S3Object s3Object = s3Client.getObject(bucketName, fileName);
             InputStream inputStream = s3Object.getObjectContent();
-            return CsvUtil.findColumnValue(inputStream, 3, food, 1);  // CKG_NM: 1열, RCP_SNO: 3열
+            return CsvUtil.findColumnValue(inputStream, 2, food, 0);  // CKG_NM: 1열, RCP_SNO: 3열
         } catch (Exception e) {
             e.printStackTrace();
             return null;

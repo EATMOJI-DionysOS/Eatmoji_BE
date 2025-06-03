@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
 public class RecipeController {
 
@@ -18,7 +19,9 @@ public class RecipeController {
 
     @GetMapping("/api/recipe")
     public String getRecipe(@RequestParam String food) {
+        String RecipeLink;
         String recipeNum = recipeSearchService.findRecipeByFood(food);
-        return "https://www.10000recipe.com/recipe/" + recipeNum;
+        RecipeLink = "https://www.10000recipe.com/recipe/" + recipeNum;
+        return RecipeLink;
     }
 }

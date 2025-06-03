@@ -7,6 +7,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.net.URLDecoder;
 
 
 @Service
@@ -23,11 +24,18 @@ public class RecipeSearchService {
         this.fileName = dotenv.get("FILE_NAME");
     }
 
+    // 레시피가 없을 때의 예외 처리 필요
     public String findRecipeByFood(String food) {
         try {
+            String recipe;
             S3Object s3Object = s3Client.getObject(bucketName, fileName);
             InputStream inputStream = s3Object.getObjectContent();
-            return CsvUtil.findColumnValue(inputStream, 2, food, 0);  // CKG_NM: 1열, RCP_SNO: 3열
+            recipe =  CsvUtil.findColumnValue(inputStream, 2, food, 0);  // CKG_NM: 1열, RCP_SNO: 3열
+            if(recipe == null) {
+                System.out.println("Recipe not found");
+                return null;
+            }
+            return recipe;
         } catch (Exception e) {
             e.printStackTrace();
             return null;

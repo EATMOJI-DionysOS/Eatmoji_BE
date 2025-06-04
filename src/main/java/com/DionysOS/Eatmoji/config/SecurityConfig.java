@@ -17,7 +17,7 @@ public class SecurityConfig {
                  .csrf(csrf -> csrf.disable())
                  .authorizeHttpRequests(auth -> auth
                          .requestMatchers("/auth/**").permitAll()
-                         .anyRequest().authenticated()
+                         .anyRequest().permitAll()
                  )
                  .formLogin(form -> form.disable()) // disable default login
                  .securityContext(security -> security.requireExplicitSave(false)) // let it persist automatically

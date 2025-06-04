@@ -28,7 +28,7 @@ public class RecipeSearchService {
             String recipe;
             S3Object s3Object = s3Client.getObject(bucketName, fileName);
             InputStream inputStream = s3Object.getObjectContent();
-            recipe =  CsvUtil.findColumnValue(inputStream, 2, food, 0);  // CKG_NM: 3열, RCP_SNO: 1열
+            recipe =  CsvUtil.findColumnValue(inputStream, 2, food, 0);  //  RCP_SNO: 1열, CKG_NM: 3열
             if(recipe == null) {
                 System.out.println("Recipe not found");
                 return null;

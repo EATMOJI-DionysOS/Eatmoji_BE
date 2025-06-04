@@ -10,6 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
+
     @Bean // TODO: Login과 Signup의 public access를 위한 securityFilterChain. 나중에 수정 거칠 것.
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http

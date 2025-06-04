@@ -61,7 +61,7 @@ personalized_prompt = PromptTemplate.from_template("""
 # LLM 체인
 personalized_chain = LLMChain(llm=llm, prompt=personalized_prompt)
 
-@app.post("/gpt/personalized-recommendation", response_model=PersonalizedRecommendationResponse)
+@app.post("/api/personalized-recommend", response_model=PersonalizedRecommendationResponse)
 async def personalized_recommendation(request: UserProfileRequest):
     try:
         # LLM에 입력값 전달

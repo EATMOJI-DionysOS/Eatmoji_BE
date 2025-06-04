@@ -20,6 +20,9 @@ public class RecipeController {
     public String getRecipe(@RequestParam String food) {
         String RecipeLink;
         String recipeNum = recipeSearchService.findRecipeByFood(food);
+        if (recipeNum == null) {
+            return "Error: Recipe not found";
+        }
         RecipeLink = "https://www.10000recipe.com/recipe/" + recipeNum;
         return RecipeLink;
     }

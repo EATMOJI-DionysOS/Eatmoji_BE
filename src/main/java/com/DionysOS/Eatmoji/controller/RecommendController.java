@@ -1,6 +1,8 @@
 package com.DionysOS.Eatmoji.controller;
 
+import com.DionysOS.Eatmoji.repository.HistoryRepository;
 import com.DionysOS.Eatmoji.service.GptRecommendation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,5 +18,7 @@ public class RecommendController {
     @PostMapping
     public void recommend(@RequestBody String emoji) {
         recommendationService.printRecommendation(emoji);
+        recommendationService.getAndSaveRecommendation(emoji);
     }
+
 }

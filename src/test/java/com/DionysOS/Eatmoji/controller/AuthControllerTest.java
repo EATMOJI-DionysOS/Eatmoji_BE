@@ -89,7 +89,7 @@ public class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"email\":\"test4444@example.com\",\"password\":\"wrongpassword\"}"))
                 .andExpect(status().isUnauthorized())
-                .andExpect(content().string("Invalid password"));
+                .andExpect(content().string("Invalid email or password! Please try again."));
     }
 
     @Test
@@ -97,7 +97,7 @@ public class AuthControllerTest {
         mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"email\":\"123123@example.com\",\"password\":\"anypassword123\"}"))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("User not found"));
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().string("Invalid email or password! Please try again."));
     }
 }

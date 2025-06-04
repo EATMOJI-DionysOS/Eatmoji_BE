@@ -19,6 +19,8 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()  // allow everything starting with /auth/
                         .anyRequest().permitAll()            // secure everything else
                 )
+                .formLogin(form -> form.disable()) // disable default login
+                .securityContext(security -> security.requireExplicitSave(false)) // let it persist automatically
                 .build();
     }
 

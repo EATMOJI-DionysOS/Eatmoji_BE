@@ -1,6 +1,5 @@
 package com.DionysOS.Eatmoji.service;
 
-import com.DionysOS.Eatmoji.dto.EmotionRequest;
 import com.DionysOS.Eatmoji.dto.FoodRecommend;
 import com.DionysOS.Eatmoji.dto.RecommendResponse;
 
@@ -11,16 +10,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;
 
+
 import java.time.LocalDateTime;
-import java.util.List;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Map;
 
 @Service
 public class GptRecommendation {
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
     private final String gptUrl = "http://localhost:8000/gpt/recommendation";
     private final HistoryRepository historyRepository;
 
+
     public GptRecommendation(HistoryRepository historyRepository) {
+        this.restTemplate = new RestTemplate();
         this.historyRepository = historyRepository;
     }
     @Autowired

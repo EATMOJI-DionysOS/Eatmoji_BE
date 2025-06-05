@@ -46,12 +46,38 @@ public class GptRecommendation {
         );
 
         RecommendResponse body = response.getBody();
-        if (body != null) {
-            List<FoodRecommend> recs = body.getRecommendations();
-            for (FoodRecommend rec : recs) {
-                System.out.println("추천 음식: " + rec.getFood());
+        ZonedDateTime nowInKST = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        LocalDateTime localKST = nowInKST.toLocalDateTime();
+
+        if (body != null && body.getRecommendations() != null) {
+            for (FoodRecommend rec : body.getRecommendations()) {
+                try {
+                    // ✅ 1. 현재 사용자 이메일 확인 로그
+                    String email = userService.getCurrentUserEmail();
+                    System.out.println("Current user email: " + email);
+
+                    // ✅ 2. History 객체 생성
+                    History history = new History(
+                            email,
+                            emoji,
+                            rec.getFood(),
+                            localKST,
+                            false
+                    );
+
+                    // ✅ 3. 저장 시도 및 확인 로그
+                    History saved = historyRepository.save(history);
+                    System.out.println("Saved history: " + saved);
+                } catch (Exception e) {
+                    // ✅ 4. 예외 로그
+                    System.err.println("Error while saving history:");
+                    e.printStackTrace();
+                }
             }
+        } else {
+            System.err.println("No recommendation received from GPT.");
         }
+        return response.getBody();
     }
 
 

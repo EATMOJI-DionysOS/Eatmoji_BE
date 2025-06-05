@@ -30,13 +30,13 @@ public class GptRecommendation {
     @Autowired
     private UserService userService; // 사용자 서비스 주입
 
-    public void printRecommendation(String emoji) {
-        EmotionRequest request = new EmotionRequest();
-        request.setEmoji(emoji);
+    public RecommendResponse printRecommendation(String emoji) {
+        Map<String, String> requestBody = Map.of("emoji", emoji);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<EmotionRequest> entity = new HttpEntity<>(request, headers);
+
+        HttpEntity<Map<String, String>> entity = new HttpEntity<>(requestBody, headers);
 
         ResponseEntity<RecommendResponse> response = restTemplate.exchange(
                 gptUrl,

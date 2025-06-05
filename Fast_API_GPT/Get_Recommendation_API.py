@@ -6,6 +6,7 @@ from langchain_openai import ChatOpenAI  # 변경된 부분
 import os
 import json
 from dotenv import load_dotenv
+import requests
 
 # Load .env file for OpenAI API key
 load_dotenv()
@@ -66,6 +67,7 @@ chain = LLMChain(llm=llm, prompt=prompt_template)
 @app.post("/gpt/recommendation", response_model=RecommendationResponse)
 async def get_recommendation(request: EmotionRequest):
     try:
+
         # 이모지에서 감정 및 강도 추출
         data = emoji_emotion_data.get(request.emoji)
         if not data:

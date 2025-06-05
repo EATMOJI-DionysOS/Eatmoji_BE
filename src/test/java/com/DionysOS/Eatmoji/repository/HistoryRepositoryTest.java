@@ -30,7 +30,8 @@ public class HistoryRepositoryTest {
                 "user@example.com",
                 "기쁨",
                 "비빔밥",
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                false
         );
 
         historyRepository.save(history);

@@ -11,11 +11,8 @@ gpt:
 # AWS S3 설정
 cloud:
   aws:
-    credentials:
-      access-key: ${AWS_ACCESS_KEY_ID}
-      secret-key: ${AWS_SECRET_ACCESS_KEY}
     region:
-      static: ${REGION}
+      static: ap-northeast-2
     s3:
-      bucket: ${S3_BUCKET_NAME}
-      filename: ${FILE_NAME}
+      bucket: eatmoji-recipes
+      filename: recipeDB.csv

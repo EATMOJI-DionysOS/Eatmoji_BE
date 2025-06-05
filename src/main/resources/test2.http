@@ -1,0 +1,17 @@
+POST http://localhost:8080/history/save
+Content-Type: application/json
+
+{
+  "emotion": "sick",
+  "intensity": 0.476,
+  "recommendations": [
+    {
+      "food": "닭죽",
+      "reason": "속이 편안해짐"
+    },
+    {
+      "food": "미역국",
+      "reason": "소화에 좋음"
+    }
+  ]
+}

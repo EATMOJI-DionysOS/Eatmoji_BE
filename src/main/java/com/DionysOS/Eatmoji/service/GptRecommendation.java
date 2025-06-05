@@ -54,52 +54,6 @@ public class GptRecommendation {
         }
     }
 
-    public void getAndSaveRecommendation(String emoji) {
-        // 1. FastAPI 호출
-        EmotionRequest request = new EmotionRequest();
-        request.setEmoji(emoji);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<EmotionRequest> entity = new HttpEntity<>(request, headers);
-
-        ResponseEntity<RecommendResponse> response = restTemplate.exchange(
-                gptUrl,
-                HttpMethod.POST,
-                entity,
-                RecommendResponse.class
-        );
-
-        RecommendResponse body = response.getBody();
-        if (body != null && body.getRecommendations() != null) {
-            for (FoodRecommend rec : body.getRecommendations()) {
-                try {
-                    // ✅ 1. 현재 사용자 이메일 확인 로그
-                    String email = userService.getCurrentUserEmail();
-                    System.out.println("Current user email: " + email);
-
-                    // ✅ 2. History 객체 생성
-                    History history = new History(
-                            email,
-                            emoji,
-                            rec.getFood(),
-                            LocalDateTime.now(),
-                            false
-                    );
-
-                    // ✅ 3. 저장 시도 및 확인 로그
-                    History saved = historyRepository.save(history);
-                    System.out.println("Saved history: " + saved);
-                } catch (Exception e) {
-                    // ✅ 4. 예외 로그
-                    System.err.println("Error while saving history:");
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            System.err.println("No recommendation received from GPT.");
-        }
-    }
 
 
 

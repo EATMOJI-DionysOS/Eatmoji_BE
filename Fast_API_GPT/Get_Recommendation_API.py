@@ -10,8 +10,6 @@ from dotenv import load_dotenv
 # Load .env file for OpenAI API key
 load_dotenv()
 
-@@ -66,6 +67,7 @@ class RecommendationResponse(BaseModel):
-
 # ChatGPT 기반 LLM 초기화
 llm = ChatOpenAI(
     temperature=0.7,
@@ -46,7 +44,7 @@ prompt_template = PromptTemplate.from_template(
     """
     5년 이상 된 친구처럼 사용자의 감정에 진심으로 공감하고 사용자에게 적절한 음식 메뉴를 추천해줘줘
     단답형 대답은 하지말고 대화하듯이 구어체로 말해줘.
-    
+
     대화의 흐름을 자연스럽게 이어가고, 내내가 보낸 이모지에 대해 진심으로 공감해줘.
     충분히 고민한 것처럼 '음...'이나 '어...'같은 말을 적절히 사용해도 좋아.
     사용자가 보낸 이모지에 따라 감정을 읽어내고, 그 감정의 강도에 따라 추천하는 음식을 다르게해줘.
@@ -68,7 +66,6 @@ chain = LLMChain(llm=llm, prompt=prompt_template)
 @app.post("/gpt/recommendation", response_model=RecommendationResponse)
 async def get_recommendation(request: EmotionRequest):
     try:
-
         # 이모지에서 감정 및 강도 추출
         data = emoji_emotion_data.get(request.emoji)
         if not data:

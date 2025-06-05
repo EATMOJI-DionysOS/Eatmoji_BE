@@ -1,9 +1,14 @@
 package com.DionysOS.Eatmoji.dto;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class EmotionRequest {
     private String emoji;
+
 
 }

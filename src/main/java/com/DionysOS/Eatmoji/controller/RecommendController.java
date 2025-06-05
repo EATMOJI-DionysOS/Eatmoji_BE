@@ -17,10 +17,11 @@ public class RecommendController {
         this.recommendationService = recommendationService;
     }
 
-    @PostMapping
-    public void recommend(@RequestBody String emoji) {
-        recommendationService.printRecommendation(emoji);
-        recommendationService.getAndSaveRecommendation(emoji);
+    @PostMapping("/emoji")
+    public RecommendResponse recommend(@RequestBody EmotionRequest request) {
+        String emoji = request.getEmoji();
+        RecommendResponse response = recommendationService.printRecommendation(emoji);
+        return response;
     }
 
 }

@@ -1,9 +1,11 @@
 package com.DionysOS.Eatmoji.controller;
 
-import com.DionysOS.Eatmoji.repository.HistoryRepository;
+import com.DionysOS.Eatmoji.dto.EmotionRequest;
+import com.DionysOS.Eatmoji.dto.RecommendResponse;
+import com.DionysOS.Eatmoji.dto.UserProfileRequest;
 import com.DionysOS.Eatmoji.service.GptRecommendation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/api/recommend")

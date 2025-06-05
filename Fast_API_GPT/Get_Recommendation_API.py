@@ -6,10 +6,11 @@ from langchain_openai import ChatOpenAI  # 변경된 부분
 import os
 import json
 from dotenv import load_dotenv
-import requests
 
 # Load .env file for OpenAI API key
 load_dotenv()
+
+@@ -66,6 +67,7 @@ class RecommendationResponse(BaseModel):
 
 # ChatGPT 기반 LLM 초기화
 llm = ChatOpenAI(

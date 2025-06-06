@@ -27,15 +27,19 @@ public class User {
     private String password;
 
     @Setter
+    @Getter
     private List<String> category; // 선호하는 음식 종류 (한식 / 중식 / 일식 / 양식 등)
 
     @Setter
+    @Getter
     private List<String> flavor; // 선호하는 맛 (매운맛 / 단맛 등)
 
     @Setter
+    @Getter
     private List<String> disease; // 질병 정보 (고혈압 / 당뇨 등)
 
     @Setter
+    @Getter
     private List<String> allergy; // 알레르기 정보 (우유 / 계란 등)
 
     public User(String email, String password) {

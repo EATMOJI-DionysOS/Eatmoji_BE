@@ -1,6 +1,5 @@
 package com.DionysOS.Eatmoji.service;
 
-import com.DionysOS.Eatmoji.dto.EmotionRequest;
 import com.DionysOS.Eatmoji.dto.FoodRecommend;
 import com.DionysOS.Eatmoji.dto.RecommendResponse;
 
@@ -11,28 +10,34 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;
 
+
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Map;
 import java.util.List;
 
 @Service
 public class GptRecommendation {
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
     private final String gptUrl = "http://localhost:8000/gpt/recommendation";
     private final HistoryRepository historyRepository;
 
+
     public GptRecommendation(HistoryRepository historyRepository) {
+        this.restTemplate = new RestTemplate();
         this.historyRepository = historyRepository;
     }
     @Autowired
     private UserService userService; // 사용자 서비스 주입
 
-    public void printRecommendation(String emoji) {
-        EmotionRequest request = new EmotionRequest();
-        request.setEmoji(emoji);
+    public RecommendResponse printRecommendation(String emoji) {
+        Map<String, String> requestBody = Map.of("emoji", emoji);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<EmotionRequest> entity = new HttpEntity<>(request, headers);
+
+        HttpEntity<Map<String, String>> entity = new HttpEntity<>(requestBody, headers);
 
         ResponseEntity<RecommendResponse> response = restTemplate.exchange(
                 gptUrl,
@@ -42,31 +47,9 @@ public class GptRecommendation {
         );
 
         RecommendResponse body = response.getBody();
-        if (body != null) {
-            List<FoodRecommend> recs = body.getRecommendations();
-            for (FoodRecommend rec : recs) {
-                System.out.println("추천 음식: " + rec.getFood());
-            }
-        }
-    }
+        ZonedDateTime nowInKST = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        LocalDateTime localKST = nowInKST.toLocalDateTime();
 
-    public void getAndSaveRecommendation(String emoji) {
-        // 1. FastAPI 호출
-        EmotionRequest request = new EmotionRequest();
-        request.setEmoji(emoji);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<EmotionRequest> entity = new HttpEntity<>(request, headers);
-
-        ResponseEntity<RecommendResponse> response = restTemplate.exchange(
-                gptUrl,
-                HttpMethod.POST,
-                entity,
-                RecommendResponse.class
-        );
-
-        RecommendResponse body = response.getBody();
         if (body != null && body.getRecommendations() != null) {
             for (FoodRecommend rec : body.getRecommendations()) {
                 try {
@@ -79,7 +62,7 @@ public class GptRecommendation {
                             email,
                             emoji,
                             rec.getFood(),
-                            LocalDateTime.now(),
+                            localKST,
                             false
                     );
 
@@ -95,6 +78,68 @@ public class GptRecommendation {
         } else {
             System.err.println("No recommendation received from GPT.");
         }
+        return response.getBody();
+    }
+
+    public RecommendResponse getAndSavePersonalizedRecommendation(String email,
+                                                                  List<String> categories,
+                                                                  List<String> flavors,
+                                                                  List<String> diseases,
+                                                                  List<String> allergies,
+                                                                  List<String> likedFoods) {
+        // ✅ 1. GPT API 요청 데이터
+        Map<String, Object> requestBody = Map.of(
+                "email", email,
+                "category", categories,
+                "flavor", flavors,
+                "disease", diseases,
+                "allergy", allergies,
+                "likedFoods", likedFoods
+        );
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+
+        // ✅ 2. GPT API 호출
+        String personalizedUrl = "http://localhost:8000/api/personalized-recommend";
+        ResponseEntity<RecommendResponse> response = restTemplate.exchange(
+                personalizedUrl,
+                HttpMethod.POST,
+                entity,
+                RecommendResponse.class
+        );
+
+        RecommendResponse body = response.getBody();
+        ZonedDateTime nowInKST = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        LocalDateTime localKST = nowInKST.toLocalDateTime();
+
+        // ✅ 3. 결과 저장
+        if (body != null && body.getRecommendations() != null) {
+            for (FoodRecommend rec : body.getRecommendations()) {
+                try {
+                    // 추천된 음식마다 DB 저장
+                    History history = new History(
+                            email,
+                            "personalized",  // 이모지 대신 'personalized'로
+                            rec.getFood(),
+                            localKST,
+                            false
+                    );
+
+                    History saved = historyRepository.save(history);
+                    System.out.println("Saved personalized history: " + saved);
+                } catch (Exception e) {
+                    System.err.println("Error while saving personalized history:");
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            System.err.println("No personalized recommendation received from GPT.");
+        }
+
+        return body;
     }
 
 

@@ -2,7 +2,7 @@
 spring:
   data:
     mongodb:
-      uri: ${MONGODB_URL}
+      uri: ${MONGODB_URI}
 
 
 # GPT FastAPI 서버 설정

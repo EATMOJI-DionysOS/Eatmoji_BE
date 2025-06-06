@@ -43,3 +43,14 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+// 빌드 시에 plain.jar 파일 생성 막기
+tasks.named('jar') {
+	enabled = false
+}
+
+// Spring Boot 실행용 jar 설정
+bootJar {
+	archiveBaseName.set('Eatmoji-app')
+	archiveVersion.set('')
+}

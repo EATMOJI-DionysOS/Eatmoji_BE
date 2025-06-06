@@ -30,15 +30,19 @@ public class History {
     private String food;
 
     @NotNull
+    private String reason;
+
+    @NotNull
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @NotNull
     private boolean isLiked = false;
 
-    public History(String email, String emotion, String food, LocalDateTime createdAt, boolean isLiked) {
+    public History(String email, String emotion, String food, String reason, LocalDateTime createdAt, boolean isLiked) {
         this.email = email;
         this.emotion = emotion;
         this.food = food;
+        this.reason = reason;
         this.createdAt = createdAt;
         this.isLiked = isLiked();
     }

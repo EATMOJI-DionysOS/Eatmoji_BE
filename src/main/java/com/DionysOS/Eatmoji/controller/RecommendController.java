@@ -19,9 +19,15 @@ import java.util.stream.Collectors;
 public class RecommendController {
 
     private final GptRecommendation recommendationService;
+    private final UserService userService;
+    private final UserRepository userRepository;
+    private final HistoryRepository historyRepository;
 
-    public RecommendController(GptRecommendation recommendationService) {
+    public RecommendController(GptRecommendation recommendationService, UserService userService, UserRepository userRepository, HistoryRepository historyRepository) {
         this.recommendationService = recommendationService;
+        this.userService = userService;
+        this.userRepository = userRepository;
+        this.historyRepository = historyRepository;
     }
 
     @PostMapping("/emoji")

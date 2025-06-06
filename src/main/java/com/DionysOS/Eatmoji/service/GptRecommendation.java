@@ -62,6 +62,7 @@ public class GptRecommendation {
                             email,
                             emoji,
                             rec.getFood(),
+                            rec.getReason(),
                             localKST,
                             false
                     );
@@ -124,6 +125,7 @@ public class GptRecommendation {
                             email,
                             "personalized",  // 이모지 대신 'personalized'로
                             rec.getFood(),
+                            rec.getReason(),
                             localKST,
                             false
                     );

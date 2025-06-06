@@ -30,6 +30,7 @@ public class HistoryRepositoryTest {
                 "user@example.com",
                 "기쁨",
                 "비빔밥",
+                "기쁜 날에 다채로운 나물과 함께 비벼 먹는 비빔밥은 배를 든든하게 채워줄거야!",
                 LocalDateTime.now(),
                 false
         );

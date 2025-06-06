@@ -43,3 +43,8 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+jar {
+	archiveBaseName.set('Eatmoji-app')   // jar 파일 이름 설정
+	archiveVersion.set('')               // 버전 제거 (원하지 않으면 생략 가능)
+}

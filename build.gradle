@@ -44,7 +44,13 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-jar {
-	archiveBaseName.set('Eatmoji-app')   // jar 파일 이름 설정
-	archiveVersion.set('')               // 버전 제거 (원하지 않으면 생략 가능)
+// 빌드 시에 plain.jar 파일 생성 막기
+tasks.named('jar') {
+	enabled = false
+}
+
+// Spring Boot 실행용 jar 설정
+bootJar {
+	archiveBaseName.set('Eatmoji-app')
+	archiveVersion.set('')
 }

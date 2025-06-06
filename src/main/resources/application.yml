@@ -4,7 +4,6 @@ spring:
     mongodb:
       uri: ${MONGODB_URI}
 
-
 # GPT FastAPI 서버 설정
 gpt:
   url: http://localhost:8000/gpt/recommendation

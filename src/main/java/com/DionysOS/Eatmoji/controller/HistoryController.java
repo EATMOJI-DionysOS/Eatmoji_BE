@@ -27,18 +27,8 @@ public class HistoryController {
         this.historyRepository = historyRepository;
     }
 
-    // 1. 히스토리 저장 (추천 받았을 때)
-    // TODO: 테스트용임. 이걸로 실제로 히스토리를 저장하지는 않을 것 (/save에서 저장할 것), 나중에 지워야 함!
-    // TODO: 디버깅용임 (/history 에서 POST 요청 보내면 다이렉트로 히스토리 저장되게 함)
-//    @PostMapping
-//    public ResponseEntity<History> saveHistory(@RequestBody History history) {
-//        history.setCreatedAt(LocalDateTime.now());
-//        history.setLiked(false);
-//        History saved = historyRepository.save(history);
-//        return ResponseEntity.ok(saved);
-//    }
 
-    // 2. 이메일로 히스토리 조회
+    // 이메일로 히스토리 조회
     // History 조회 시 DTO로 반환
     @GetMapping
     public ResponseEntity<List<HistoryResponse>> getHistories() {
@@ -63,7 +53,7 @@ public class HistoryController {
         return ResponseEntity.ok(responses);
     }
 
-    // 3. 좋아요 토글
+    // 좋아요 토글
     @PatchMapping("/{id}/like")
     public ResponseEntity<String> toggleLike(@PathVariable String id) {
         return historyRepository.findById(id)
@@ -75,6 +65,7 @@ public class HistoryController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // 추천 결과 저장
     @PostMapping("/save")
     public ResponseEntity<List<HistoryResponse>> saveHistory(@RequestBody RecommendResponse response) {
         List<HistoryResponse> responseList = new ArrayList<>();

@@ -37,4 +37,26 @@ public class RecommendController {
         return response;
     }
 
+    @PostMapping("/personalized")
+    public RecommendResponse recommendPersonalized() {
+        String email = userService.getCurrentUserEmail();
+
+        List<History> likedHistories = historyRepository.findLikedFoodsByEmail(email);
+        List<String> likedFoods = likedHistories.stream()
+                .map(History::getFood)
+                .distinct()
+                .collect(Collectors.toList());
+
+
+        Optional<User> profile = userRepository.findByEmail(email);
+        List<String> categories = profile.get().getCategory();
+        List<String> flavors = profile.get().getFlavor();
+        List<String> diseases = profile.get().getDisease();
+        List<String> allergies = profile.get().getAllergy();
+        RecommendResponse response = recommendationService.getAndSavePersonalizedRecommendation(
+                email, categories, flavors, diseases, allergies, likedFoods
+        );
+        return response;
+    }
+
 }

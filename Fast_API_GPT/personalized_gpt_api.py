@@ -22,7 +22,7 @@ llm = ChatOpenAI(
 app = FastAPI()
 
 # 모델 정의
-class UserProfileRequest(BaseModel):
+class PersonalizedRequest(BaseModel):
     email: str
     category: list[str]
     flavor: list[str]
@@ -62,7 +62,7 @@ personalized_prompt = PromptTemplate.from_template("""
 personalized_chain = LLMChain(llm=llm, prompt=personalized_prompt)
 
 @app.post("/api/personalized-recommend", response_model=PersonalizedRecommendationResponse)
-async def personalized_recommendation(request: UserProfileRequest):
+async def personalized_recommendation(request: PersonalizedRequest):
     try:
         # LLM에 입력값 전달
         prompt_input = {

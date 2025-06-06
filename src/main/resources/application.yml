@@ -2,7 +2,8 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/eatmoji
+      uri: ${MONGODB_URL}
+
 
 # GPT FastAPI 서버 설정
 gpt:
@@ -16,3 +17,4 @@ cloud:
     s3:
       bucket: eatmoji-recipes
       filename: recipeDB.csv
+

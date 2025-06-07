@@ -1,10 +1,12 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain_openai import ChatOpenAI
 import os
 from dotenv import load_dotenv
+
+router = APIRouter()
 
 # Load .env file for OpenAI API key
 load_dotenv()
@@ -17,9 +19,6 @@ llm = ChatOpenAI(
     max_tokens=3000,
     request_timeout=60,
 )
-
-# Initialize FastAPI app
-app = FastAPI()
 
 # 모델 정의
 class PersonalizedRequest(BaseModel):
@@ -61,7 +60,7 @@ personalized_prompt = PromptTemplate.from_template("""
 # LLM 체인
 personalized_chain = LLMChain(llm=llm, prompt=personalized_prompt)
 
-@app.post("/api/personalized-recommend", response_model=PersonalizedRecommendationResponse)
+@router.post("/api/personalized-recommend", response_model=PersonalizedRecommendationResponse)
 async def personalized_recommendation(request: PersonalizedRequest):
     try:
         # LLM에 입력값 전달

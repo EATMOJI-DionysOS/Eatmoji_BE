@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
@@ -6,6 +6,8 @@ from langchain_openai import ChatOpenAI  # 변경된 부분
 import os
 import json
 from dotenv import load_dotenv
+
+router = APIRouter()
 
 # Load .env file for OpenAI API key
 load_dotenv()
@@ -23,8 +25,6 @@ llm = ChatOpenAI(
 with open("emoji2emotion_filtered_baseintensity.json", "r", encoding="utf-8") as f:
     emoji_emotion_data = json.load(f)
 
-# Initialize FastAPI app
-app = FastAPI()
 
 # Define request and response models
 class EmotionRequest(BaseModel):
@@ -63,7 +63,7 @@ prompt_template = PromptTemplate.from_template(
 # LLM 체인 구성
 chain = LLMChain(llm=llm, prompt=prompt_template)
 
-@app.post("/gpt/recommendation", response_model=RecommendationResponse)
+@router.post("/gpt/recommendation", response_model=RecommendationResponse)
 async def get_recommendation(request: EmotionRequest):
     try:
         # 이모지에서 감정 및 강도 추출

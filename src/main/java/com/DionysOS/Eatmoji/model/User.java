@@ -28,19 +28,19 @@ public class User {
 
     @Setter
     @Getter
-    private List<String> category; // 선호하는 음식 종류 (한식 / 중식 / 일식 / 양식 등)
+    private List<String> category = new ArrayList<>(); // 선호하는 음식 종류 (한식 / 중식 / 일식 / 양식 등)
 
     @Setter
     @Getter
-    private List<String> flavor; // 선호하는 맛 (매운맛 / 단맛 등)
+    private List<String> flavor = new ArrayList<>(); // 선호하는 맛 (매운맛 / 단맛 등)
 
     @Setter
     @Getter
-    private List<String> disease; // 질병 정보 (고혈압 / 당뇨 등)
+    private List<String> disease = new ArrayList<>(); // 질병 정보 (고혈압 / 당뇨 등)
 
     @Setter
     @Getter
-    private List<String> allergy; // 알레르기 정보 (우유 / 계란 등)
+    private List<String> allergy = new ArrayList<>(); // 알레르기 정보 (우유 / 계란 등)
 
     public User(String email, String password) {
         this.email = email;

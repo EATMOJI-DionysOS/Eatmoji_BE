@@ -47,4 +47,25 @@ public class User {
         this.password = password;
     }
 
+
+    public List<String> getCategory() {
+        if (category == null) category = new ArrayList<>();
+        return category;
+    }
+
+    public List<String> getFlavor() {
+        if (flavor == null) flavor = new ArrayList<>();
+        return flavor;
+    }
+
+    public List<String> getDisease() {
+        if (disease == null) disease = new ArrayList<>();
+        return disease;
+    }
+
+    public List<String> getAllergy() {
+        if (allergy == null) allergy = new ArrayList<>();
+        return allergy;
+    }
+
 }

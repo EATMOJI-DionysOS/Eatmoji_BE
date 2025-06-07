@@ -35,21 +35,44 @@ public class UserService {
     }
 
 
-    private List<String> merge(List<String> original, AttributeUpdateRequest update) {
-        List<String> result = original == null ? new ArrayList<>() : new ArrayList<>(original);
-        if (update != null) {
-            if (update.getAdd() != null) result.addAll(update.getAdd());
-            if (update.getRemove() != null) result.removeAll(update.getRemove());
-        }
-        return result.isEmpty() ? null : result;
-    }
-
     public void updateUserProfile(User user, UserProfileRequest request) {
-        user.setCategory(merge(user.getCategory(), request.getCategory()));
-        user.setFlavor(merge(user.getFlavor(), request.getFlavor()));
-        user.setDisease(merge(user.getDisease(), request.getDisease()));
-        user.setAllergy(merge(user.getAllergy(), request.getAllergy()));
+        if (request.getCategory() != null) {
+            if (request.getCategory().getAdd() != null) {
+                user.getCategory().addAll(request.getCategory().getAdd());
+            }
+            if (request.getCategory().getRemove() != null) {
+                user.getCategory().removeAll(request.getCategory().getRemove());
+            }
+        }
+
+        if (request.getFlavor() != null) {
+            if (request.getFlavor().getAdd() != null) {
+                user.getFlavor().addAll(request.getFlavor().getAdd());
+            }
+            if (request.getFlavor().getRemove() != null) {
+                user.getFlavor().removeAll(request.getFlavor().getRemove());
+            }
+        }
+
+        if (request.getDisease() != null) {
+            if (request.getDisease().getAdd() != null) {
+                user.getDisease().addAll(request.getDisease().getAdd());
+            }
+            if (request.getDisease().getRemove() != null) {
+                user.getDisease().removeAll(request.getDisease().getRemove());
+            }
+        }
+
+        if (request.getAllergy() != null) {
+            if (request.getAllergy().getAdd() != null) {
+                user.getAllergy().addAll(request.getAllergy().getAdd());
+            }
+            if (request.getAllergy().getRemove() != null) {
+                user.getAllergy().removeAll(request.getAllergy().getRemove());
+            }
+        }
 
         userRepository.save(user);
     }
+
 }

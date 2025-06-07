@@ -13,7 +13,6 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
 @Document(collection = "users")
 public class User {
 
@@ -21,25 +20,23 @@ public class User {
     @Email
     @NotBlank
     @Indexed(unique = true)
+    @Getter
     private String email;  // user 생성 시에 controller에서 중복 검증 필요
 
     @NotNull
+    @Getter
     private String password;
 
     @Setter
-    @Getter
     private List<String> category = new ArrayList<>(); // 선호하는 음식 종류 (한식 / 중식 / 일식 / 양식 등)
 
     @Setter
-    @Getter
     private List<String> flavor = new ArrayList<>(); // 선호하는 맛 (매운맛 / 단맛 등)
 
     @Setter
-    @Getter
     private List<String> disease = new ArrayList<>(); // 질병 정보 (고혈압 / 당뇨 등)
 
     @Setter
-    @Getter
     private List<String> allergy = new ArrayList<>(); // 알레르기 정보 (우유 / 계란 등)
 
     public User(String email, String password) {

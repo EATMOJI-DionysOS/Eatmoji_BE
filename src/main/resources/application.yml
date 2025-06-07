@@ -17,3 +17,12 @@ cloud:
       bucket: eatmoji-recipes
       filename: recipeDB.csv
 
+# swagger 설정
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+

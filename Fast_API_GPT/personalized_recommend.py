@@ -4,12 +4,9 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain_openai import ChatOpenAI
 import os
-from dotenv import load_dotenv
+
 
 router = APIRouter()
-
-# Load .env file for OpenAI API key
-load_dotenv()
 
 # ChatGPT 기반 LLM 초기화
 llm = ChatOpenAI(

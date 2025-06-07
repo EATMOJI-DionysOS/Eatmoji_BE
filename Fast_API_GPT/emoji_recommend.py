@@ -5,12 +5,8 @@ from langchain.chains import LLMChain
 from langchain_openai import ChatOpenAI  # 변경된 부분
 import os
 import json
-from dotenv import load_dotenv
 
 router = APIRouter()
-
-# Load .env file for OpenAI API key
-load_dotenv()
 
 # ChatGPT 기반 LLM 초기화
 llm = ChatOpenAI(

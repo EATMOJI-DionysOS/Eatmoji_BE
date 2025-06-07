@@ -43,4 +43,6 @@ jobs:
           script: |
             pkill -f 'java -jar' || true
             sleep 5 
-            bash -c "nohup java -jar ~/app/Eatmoji-app.jar > app.log 2>&1 & disown"
+            cd ~/app
+            nohup java -jar ~/app/Eatmoji-app.jar > app.log 2>&1 & 
+            disown

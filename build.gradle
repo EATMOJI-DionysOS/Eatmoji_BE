@@ -54,3 +54,7 @@ bootJar {
 	archiveBaseName.set('Eatmoji-app')
 	archiveVersion.set('')
 }
+
+tasks.named('bootJar') {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

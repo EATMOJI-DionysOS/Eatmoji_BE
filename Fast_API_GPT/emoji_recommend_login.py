@@ -37,6 +37,8 @@ class FoodRecommendation(BaseModel):
     reason: str
 
 class RecommendResponse(BaseModel):
+    emotion: str
+    intensity: float
     recommendations: list[FoodRecommendation]
 
 # GPT 프롬프트 정의
@@ -102,7 +104,11 @@ async def emoji_personalized_recommendation(request: EmojiPersonalizedRequest):
                 except ValueError:
                     continue
 
-        return {"recommendations": recommendations}
+        return {
+            "emotion": emotion,
+            "intensity": intensity,
+            "recommendations": recommendations
+            }
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

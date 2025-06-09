@@ -53,7 +53,7 @@
 | **AI**           | GPT-4o (OpenAI API)    |
 | **DB**           | MongoDB                |
 | **프론트**       | React, Next            |
-| **기타**         | LangChain, Swahgger    |
+| **기타**         | LangChain, Swagger    |
 | **배포/서버**    | AWS EC2                |
 
 ---

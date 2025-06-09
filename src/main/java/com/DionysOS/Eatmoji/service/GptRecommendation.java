@@ -82,6 +82,58 @@ public class GptRecommendation {
         return response.getBody();
     }
 
+    public RecommendResponse getAndSaveEmojiPersonalizedRecommendation(
+            String emoji,
+            String email,
+            List<String> categories,
+            List<String> flavors,
+            List<String> diseases,
+            List<String> allergies,
+            List<String> likedFoods
+    ) {
+        // FastAPI 요청 body 구성
+        Map<String, Object> requestBody = Map.of(
+                "emoji", emoji,
+                "email", email,
+                "category", categories,
+                "flavor", flavors,
+                "disease", diseases,
+                "allergy", allergies,
+                "likedFoods", likedFoods
+        );
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+
+        // FastAPI 호출
+        String fastapiUrl = "http://localhost:8000/gpt/recommend/login";
+        ResponseEntity<RecommendResponse> response = restTemplate.exchange(
+                fastapiUrl,
+                HttpMethod.POST,
+                entity,
+                RecommendResponse.class
+        );
+
+
+        RecommendResponse body = response.getBody();
+        if (body != null && body.getRecommendations() != null) {
+            ZonedDateTime nowInKST = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+            LocalDateTime localKST = nowInKST.toLocalDateTime();
+            for (FoodRecommend rec : body.getRecommendations()) {
+                History history = new History(
+                        email,
+                        emoji,
+                        rec.getFood(),
+                        rec.getReason(),
+                        localKST,
+                        false
+                );
+                historyRepository.save(history);
+            }
+        }
+        return body;
+    }
     public RecommendResponse getAndSavePersonalizedRecommendation(String email,
                                                                   List<String> categories,
                                                                   List<String> flavors,

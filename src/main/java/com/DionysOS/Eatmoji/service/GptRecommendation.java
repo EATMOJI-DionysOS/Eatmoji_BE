@@ -20,7 +20,6 @@ import java.util.List;
 @Service
 public class GptRecommendation {
     private final RestTemplate restTemplate;
-    private final String gptUrl = "http://localhost:8000/gpt/recommendation";
     private final HistoryRepository historyRepository;
 
 
@@ -40,7 +39,7 @@ public class GptRecommendation {
         HttpEntity<Map<String, String>> entity = new HttpEntity<>(requestBody, headers);
 
         ResponseEntity<RecommendResponse> response = restTemplate.exchange(
-                gptUrl,
+                "http://localhost:8000/gpt/recommendation",
                 HttpMethod.POST,
                 entity,
                 RecommendResponse.class
@@ -82,13 +81,65 @@ public class GptRecommendation {
         return response.getBody();
     }
 
+    public RecommendResponse getAndSaveEmojiPersonalizedRecommendation(
+            String emoji,
+            String email,
+            List<String> categories,
+            List<String> flavors,
+            List<String> diseases,
+            List<String> allergies,
+            List<String> likedFoods
+    ) {
+        // FastAPI 요청 body 구성
+        Map<String, Object> requestBody = Map.of(
+                "emoji", emoji,
+                "email", email,
+                "category", categories,
+                "flavor", flavors,
+                "disease", diseases,
+                "allergy", allergies,
+                "likedFoods", likedFoods
+        );
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+
+        // FastAPI 호출
+        String fastapiUrl = "http://localhost:8000/gpt/recommend/login";
+        ResponseEntity<RecommendResponse> response = restTemplate.exchange(
+                fastapiUrl,
+                HttpMethod.POST,
+                entity,
+                RecommendResponse.class
+        );
+
+
+        RecommendResponse body = response.getBody();
+        if (body != null && body.getRecommendations() != null) {
+            ZonedDateTime nowInKST = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+            LocalDateTime localKST = nowInKST.toLocalDateTime();
+            for (FoodRecommend rec : body.getRecommendations()) {
+                History history = new History(
+                        email,
+                        emoji,
+                        rec.getFood(),
+                        rec.getReason(),
+                        localKST,
+                        false
+                );
+                historyRepository.save(history);
+            }
+        }
+        return body;
+    }
     public RecommendResponse getAndSavePersonalizedRecommendation(String email,
                                                                   List<String> categories,
                                                                   List<String> flavors,
                                                                   List<String> diseases,
                                                                   List<String> allergies,
                                                                   List<String> likedFoods) {
-        // ✅ 1. GPT API 요청 데이터
+        // 1. GPT API 요청 데이터
         Map<String, Object> requestBody = Map.of(
                 "email", email,
                 "category", categories,
@@ -103,7 +154,7 @@ public class GptRecommendation {
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
-        // ✅ 2. GPT API 호출
+        // 2. GPT API 호출
         String personalizedUrl = "http://localhost:8000/api/personalized-recommend";
         ResponseEntity<RecommendResponse> response = restTemplate.exchange(
                 personalizedUrl,
@@ -116,7 +167,7 @@ public class GptRecommendation {
         ZonedDateTime nowInKST = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         LocalDateTime localKST = nowInKST.toLocalDateTime();
 
-        // ✅ 3. 결과 저장
+        // 3. 결과 저장
         if (body != null && body.getRecommendations() != null) {
             for (FoodRecommend rec : body.getRecommendations()) {
                 try {

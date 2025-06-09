@@ -36,6 +36,32 @@ public class RecommendController {
         RecommendResponse response = recommendationService.printRecommendation(emoji);
         return response;
     }
+    @PostMapping("/emoji/login")
+    public RecommendResponse loginRecommend(@RequestBody EmotionRequest request) {
+        String emoji = request.getEmoji();
+
+        // 🟢 로그인한 사용자 이메일
+        String email = userService.getCurrentUserEmail();
+
+        // 🟢 사용자 프로필 정보
+        Optional<User> profile = userRepository.findByEmail(email);
+        List<String> categories = profile.map(User::getCategory).orElse(List.of());
+        List<String> flavors = profile.map(User::getFlavor).orElse(List.of());
+        List<String> diseases = profile.map(User::getDisease).orElse(List.of());
+        List<String> allergies = profile.map(User::getAllergy).orElse(List.of());
+
+        // 🟢 좋아요한 음식 목록
+        List<History> likedHistories = historyRepository.findLikedFoodsByEmail(email);
+        List<String> likedFoods = likedHistories.stream()
+                .map(History::getFood)
+                .distinct()
+                .collect(Collectors.toList());
+
+        // 🟢 FastAPI로 요청 및 결과 저장
+        return recommendationService.getAndSaveEmojiPersonalizedRecommendation(
+                emoji, email, categories, flavors, diseases, allergies, likedFoods
+        );
+    }
 
     @PostMapping("/personalized")
     public RecommendResponse recommendPersonalized() {

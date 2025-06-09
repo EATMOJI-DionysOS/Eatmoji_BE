@@ -39,7 +39,7 @@ public class GptRecommendation {
         HttpEntity<Map<String, String>> entity = new HttpEntity<>(requestBody, headers);
 
         ResponseEntity<RecommendResponse> response = restTemplate.exchange(
-                "http://localhost:8000/gpt/recommendation",
+                "http://localhost:8000/gpt/recommend",
                 HttpMethod.POST,
                 entity,
                 RecommendResponse.class
@@ -155,7 +155,7 @@ public class GptRecommendation {
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
         // 2. GPT API 호출
-        String personalizedUrl = "http://localhost:8000/api/personalized-recommend";
+        String personalizedUrl = "http://localhost:8000/gpt/recommend/login";
         ResponseEntity<RecommendResponse> response = restTemplate.exchange(
                 personalizedUrl,
                 HttpMethod.POST,

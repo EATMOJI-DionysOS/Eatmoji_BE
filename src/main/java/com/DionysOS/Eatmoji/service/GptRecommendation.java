@@ -20,7 +20,6 @@ import java.util.List;
 @Service
 public class GptRecommendation {
     private final RestTemplate restTemplate;
-    private final String gptUrl = "http://localhost:8000/gpt/recommendation";
     private final HistoryRepository historyRepository;
 
 
@@ -40,7 +39,7 @@ public class GptRecommendation {
         HttpEntity<Map<String, String>> entity = new HttpEntity<>(requestBody, headers);
 
         ResponseEntity<RecommendResponse> response = restTemplate.exchange(
-                gptUrl,
+                "http://localhost:8000/gpt/recommendation",
                 HttpMethod.POST,
                 entity,
                 RecommendResponse.class

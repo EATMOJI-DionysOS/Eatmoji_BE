@@ -29,3 +29,8 @@ springdoc:
 # jwt Token 설정
 jwt:
     secret: ${JWT_SECRET}
+
+# https reverse proxy
+server:
+  port: 8080
+  forward-headers-strategy: framework

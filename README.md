@@ -129,7 +129,7 @@ EATMOJI_BE/
 
 ## 🤝 가이드
 
-* Pull Request 전에는 반드시 [CONTRIBUTING.md](../Eatmoji_BE/develop/CONTRIBUTING.md)를 확인해주세요.
+* Pull Request 전에는 반드시 [CONTRIBUTING.md](CONTRIBUTING.MD)를 확인해주세요.
 * 커밋 메시지는 [Conventional Commits](https://www.conventionalcommits.org/) 형식을 권장합니다.
 * 브랜치 전략 및 PR 리뷰 프로세스는 Wiki에 설명되어 있습니다.
 
@@ -137,7 +137,7 @@ EATMOJI_BE/
 
 ## 📄 라이선스
 
-번 프로젝트는 [MIT License](../Eatmoji_BE/blob/develop/LICENSE)에 따라 오픈소스로 공개되어 있습니다.
+번 프로젝트는 [MIT License](LICENSE)에 따라 오픈소스로 공개되어 있습니다.
 
 </br>
 

@@ -25,17 +25,29 @@ ex) feat/#16-API-create-post
 ```
 
 ✨ feat: 새로운 기능 추가
+
 🔨 fix: 기능 수정 - 사용자가 동작했을 때 달라지는 것
+
 ♻️ refactor: 코드 리펙토링 - 사용자가 동작했을 때 달라지지 않고 코드 변경 (기능 개선, 버전업)
+
 🐛 bug: 버그 수정
+
 🚑️ hotfix: 핫픽스
+
 💄 UI: CSS 수정, UI수정
+
 🎨 style: 코드 포맷팅, 세미 콜론 누락, 코드 변경이 없는 경우
+
 🔧 config: 설정, 환경 변수 변경
+
 ✏️ typo: 오타 수정 , 워딩 수정
+
 📝 docs: 문서 수정
+
 💬 comment: Todo, Highlight, Question 등 기타 주석 추가/삭제
+
 📦 package: 새로운 라이브러리 추가
+
 🔥 remove: 코드나 파일 삭제
 
 

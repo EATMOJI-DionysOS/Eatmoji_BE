@@ -59,7 +59,7 @@ prompt_template = PromptTemplate.from_template(
 # LLM 체인 구성
 chain = LLMChain(llm=llm, prompt=prompt_template)
 
-@router.post("/gpt/recommendation", response_model=RecommendationResponse)
+@router.post("/gpt/recommend", response_model=RecommendationResponse)
 async def get_recommendation(request: EmotionRequest):
     try:
         # 이모지에서 감정 및 강도 추출

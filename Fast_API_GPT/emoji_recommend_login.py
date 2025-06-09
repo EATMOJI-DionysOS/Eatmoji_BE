@@ -61,7 +61,7 @@ prompt_template = PromptTemplate.from_template("""
 chain = LLMChain(llm=llm, prompt=prompt_template)
 
 # API 엔드포인트
-@app.post("/gpt/recommend/login", response_model=RecommendResponse)
+@router.post("/gpt/recommend/login", response_model=RecommendResponse)
 async def emoji_personalized_recommendation(request: EmojiPersonalizedRequest):
     try:
         # 이모지 → emotion, intensity 변환

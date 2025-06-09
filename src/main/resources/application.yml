@@ -26,3 +26,6 @@ springdoc:
     enabled: true
     path: /swagger-ui.html
 
+# jwt Token 설정
+jwt:
+    secret: ${JWT_SECRET}

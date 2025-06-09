@@ -3,6 +3,7 @@ package com.DionysOS.Eatmoji.controller;
 import com.DionysOS.Eatmoji.dto.*;
 import com.DionysOS.Eatmoji.model.User;
 import com.DionysOS.Eatmoji.repository.UserRepository;
+import com.DionysOS.Eatmoji.service.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,9 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignupRequest request) {
@@ -47,6 +51,10 @@ public class AuthController {
 
         if (user.isPresent() && passwordEncoder.matches(request.getPassword(), user.get().getPassword())) {
 
+            // Generate JWT tokens (access and refresh)
+            String accessToken = jwtTokenProvider.createAccessToken(user.get().getEmail());
+            String refreshToken = jwtTokenProvider.createRefreshToken(user.get().getEmail());
+
             // Store in Spring Security context
             List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
             UsernamePasswordAuthenticationToken authToken =
@@ -60,6 +68,8 @@ public class AuthController {
             return ResponseEntity.ok(LoginResponse.builder()
                     .email(user.get().getEmail())
                     .message("Login successful!")
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken)
                     .build());
         }
 

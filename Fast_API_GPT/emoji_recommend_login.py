@@ -6,6 +6,8 @@ from langchain_openai import ChatOpenAI
 import os
 import json
 
+router = APIRouter()
+
 # ChatGPT 기반 LLM 초기화
 llm = ChatOpenAI(
     temperature=0.7,
@@ -19,8 +21,6 @@ llm = ChatOpenAI(
 with open("emoji2emotion_filtered_baseintensity.json", "r", encoding="utf-8") as f:
     emoji_emotion_data = json.load(f)
 
-# FastAPI 앱 정의
-router = APIRouter()
 
 # 요청/응답 모델 정의
 class EmojiPersonalizedRequest(BaseModel):

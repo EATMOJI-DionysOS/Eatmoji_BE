@@ -17,7 +17,7 @@ public class CorsConfig {
         config.setAllowedOrigins(List.of(
                 "http://localhost:3000",
                 "https://3.37.53.72.nip.io",
-                "eatmoji-fe.vercel.app"
+                "https://eatmoji-fe.vercel.app"
         )); // Vercel 도메인도 포함
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));

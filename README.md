@@ -34,6 +34,7 @@ Eatmoji는 감정 상황을 이모지로 선택하면, 이어 맞는 음식을 �
 
 ## 🚀 Swagger 링크
 🐸`https://3.37.53.72.nip.io/swagger-ui/index.html`
+</br>
 🐸`http://3.37.53.72:8000/docs`
 </br>
 
@@ -116,7 +117,10 @@ EATMOJI_BE/
 ### ✔️Back-end
 <img src="https://img.shields.io/badge/Spring-61BA55?style=for-the-badge&logo=Spring&logoColor=white"><img src="https://img.shields.io/badge/SpringBoot-8ED16A?style=for-the-badge&logo=SpringBoot&logoColor=white"><img src="https://img.shields.io/badge/Springsecurity-39A346?style=for-the-badge&logo=Springsecurity&logoColor=white"><img src="https://img.shields.io/badge/FastAPI-2BA498?style=for-the-badge&logo=FastAPI&logoColor=white"><img src="https://img.shields.io/badge/MongoDB-4AB349?style=for-the-badge&logo=MongoDB&logoColor=white">
 ### ✔️Deployment environment
-<img src="https://img.shields.io/badge/AWS EC2-FFFFFF?style=for-the-badge&logo=AWS&logoColor=white">
+<img src="https://img.shields.io/badge/AWS EC2-FF9900?style=for-the-badge&logo=AWS&logoColor=white"><img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">
+
+### ✔️Cloud Storage
+<img src="https://img.shields.io/badge/AWS S3-222222?style=for-the-badge&logo=AWS&logoColor=white">
 
 ### ✔️AI
 <img src="https://img.shields.io/badge/OpenAI-000000?style=for-the-badge&logo=OpenAI&logoColor=white"><img src="https://img.shields.io/badge/langchain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white">

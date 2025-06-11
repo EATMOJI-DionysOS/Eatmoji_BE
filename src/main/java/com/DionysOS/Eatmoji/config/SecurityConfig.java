@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll() // 인증 관련 엔드포인트 전면 허용
                         .requestMatchers("/api/recommend/emoji").permitAll() // 이모지 추천 API (로그인 없이 하는 것) 전면 허용
+                        .requestMatchers("/api/recipe").permitAll() // recipe GET method 전면 허용
                         .anyRequest().authenticated() // 나머지는 로그인 전용
                 )
                 .formLogin(form -> form.disable())

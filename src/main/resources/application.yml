@@ -26,6 +26,8 @@ springdoc:
     enabled: true
     path: /swagger-ui.html
     url: https://3.37.53.72.nip.io/v3/api-docs
+  server:
+    url: https://3.37.53.72.nip.io
 
 # jwt Token 설정
 jwt:

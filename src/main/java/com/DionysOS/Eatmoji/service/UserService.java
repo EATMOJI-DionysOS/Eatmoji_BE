@@ -1,6 +1,5 @@
 package com.DionysOS.Eatmoji.service;
 
-import com.DionysOS.Eatmoji.dto.AttributeUpdateRequest;
 import com.DionysOS.Eatmoji.dto.UserProfileRequest;
 import com.DionysOS.Eatmoji.model.User;
 import com.DionysOS.Eatmoji.repository.UserRepository;
@@ -10,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,42 +35,23 @@ public class UserService {
 
     public void updateUserProfile(User user, UserProfileRequest request) {
         if (request.getCategory() != null) {
-            if (request.getCategory().getAdd() != null) {
-                user.getCategory().addAll(request.getCategory().getAdd());
-            }
-            if (request.getCategory().getRemove() != null) {
-                user.getCategory().removeAll(request.getCategory().getRemove());
-            }
+            user.setCategory(new ArrayList<>(request.getCategory()));
         }
 
         if (request.getFlavor() != null) {
-            if (request.getFlavor().getAdd() != null) {
-                user.getFlavor().addAll(request.getFlavor().getAdd());
-            }
-            if (request.getFlavor().getRemove() != null) {
-                user.getFlavor().removeAll(request.getFlavor().getRemove());
-            }
+            user.setFlavor(new ArrayList<>(request.getFlavor()));
         }
 
         if (request.getDisease() != null) {
-            if (request.getDisease().getAdd() != null) {
-                user.getDisease().addAll(request.getDisease().getAdd());
-            }
-            if (request.getDisease().getRemove() != null) {
-                user.getDisease().removeAll(request.getDisease().getRemove());
-            }
+            user.setDisease(new ArrayList<>(request.getDisease()));
         }
 
         if (request.getAllergy() != null) {
-            if (request.getAllergy().getAdd() != null) {
-                user.getAllergy().addAll(request.getAllergy().getAdd());
-            }
-            if (request.getAllergy().getRemove() != null) {
-                user.getAllergy().removeAll(request.getAllergy().getRemove());
-            }
+            user.setAllergy(new ArrayList<>(request.getAllergy()));
         }
-
         userRepository.save(user);
+
     }
+
 
 }

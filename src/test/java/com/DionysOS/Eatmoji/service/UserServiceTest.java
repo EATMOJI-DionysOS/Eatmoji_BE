@@ -1,6 +1,5 @@
 package com.DionysOS.Eatmoji.service;
 
-import com.DionysOS.Eatmoji.dto.AttributeUpdateRequest;
 import com.DionysOS.Eatmoji.dto.UserProfileRequest;
 import com.DionysOS.Eatmoji.model.User;
 import com.DionysOS.Eatmoji.repository.UserRepository;
@@ -30,7 +29,6 @@ public class UserServiceTest {
     public void setup() {
         MockitoAnnotations.openMocks(this);
 
-        // Mock SecurityContextHolder
         Authentication authentication = mock(Authentication.class);
         when(authentication.getPrincipal()).thenReturn(email);
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -45,34 +43,18 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testUpdateUserProfile() {
+    public void testUpdateUserProfile_overwritesValues() {
         User user = new User(email, "password123");
-
         user.setCategory(List.of("양식"));
         user.setFlavor(List.of("단맛"));
         user.setDisease(List.of("고혈압"));
         user.setAllergy(List.of("우유"));
 
-        // 기본 생성자 사용 후 setter로 값 설정
-        AttributeUpdateRequest categoryAttr = new AttributeUpdateRequest();
-        categoryAttr.setAdd(List.of("한식"));
-        categoryAttr.setRemove(List.of("양식"));
-
-        AttributeUpdateRequest flavorAttr = new AttributeUpdateRequest();
-        flavorAttr.setAdd(List.of("짠맛"));
-        flavorAttr.setRemove(List.of("단맛"));
-
-        AttributeUpdateRequest diseaseAttr = new AttributeUpdateRequest();
-        diseaseAttr.setAdd(null);
-        diseaseAttr.setRemove(List.of("고혈압"));
-
-        AttributeUpdateRequest allergyAttr = new AttributeUpdateRequest(); // 유지할 것이므로 비워둠
-
         UserProfileRequest request = new UserProfileRequest();
-        request.setCategory(categoryAttr);
-        request.setFlavor(flavorAttr);
-        request.setDisease(diseaseAttr);
-        request.setAllergy(allergyAttr);
+        request.setCategory(List.of("한식"));
+        request.setFlavor(List.of("짠맛"));
+        request.setDisease(List.of());
+        request.setAllergy(List.of("우유")); // 변경 없음
 
         when(userRepository.save(any(User.class))).thenReturn(user);
 
@@ -80,22 +62,18 @@ public class UserServiceTest {
 
         assertEquals(List.of("한식"), user.getCategory());
         assertEquals(List.of("짠맛"), user.getFlavor());
-        assertNull(user.getDisease());  // 완전히 제거됨
-        assertEquals(List.of("우유"), user.getAllergy()); // 변경 없음
+        assertTrue(user.getDisease() == null || user.getDisease().isEmpty());
+        assertEquals(List.of("우유"), user.getAllergy());
     }
 
     @Test
-    public void testAddAttributesWhenEmpty() {
+    public void testUpdateUserProfile_addToEmpty() {
         User user = new User(email, "password123");
 
-        // 초기 상태는 모두 null
-        assertNull(user.getCategory());
-
-        AttributeUpdateRequest categoryAttr = new AttributeUpdateRequest();
-        categoryAttr.setAdd(List.of("한식"));  // 처음 추가
+        assertTrue(user.getCategory() == null || user.getCategory().isEmpty());
 
         UserProfileRequest request = new UserProfileRequest();
-        request.setCategory(categoryAttr);
+        request.setCategory(List.of("한식"));
 
         userService.updateUserProfile(user, request);
 
@@ -103,22 +81,20 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testAddAndRemoveSameItem() {
+    public void testUpdateUserProfile_setAllFields() {
         User user = new User(email, "password123");
-        user.setFlavor(List.of("매운맛"));
-
-        AttributeUpdateRequest flavorAttr = new AttributeUpdateRequest();
-        flavorAttr.setAdd(List.of("단맛"));      // 추가
-        flavorAttr.setRemove(List.of("단맛"));   // 동시에 제거
 
         UserProfileRequest request = new UserProfileRequest();
-        request.setFlavor(flavorAttr);
+        request.setCategory(List.of("중식"));
+        request.setFlavor(List.of("매운맛"));
+        request.setDisease(List.of("당뇨병"));
+        request.setAllergy(List.of("땅콩", "갑각류"));
 
         userService.updateUserProfile(user, request);
 
-        // 단맛은 제거되고 매운맛만 남아야 함
+        assertEquals(List.of("중식"), user.getCategory());
         assertEquals(List.of("매운맛"), user.getFlavor());
+        assertEquals(List.of("당뇨병"), user.getDisease());
+        assertEquals(List.of("땅콩", "갑각류"), user.getAllergy());
     }
-
-
 }

@@ -40,7 +40,7 @@ public class UserController {
                 );
     }
 
-    @PatchMapping("/profile")
+    @PutMapping("/profile")
     public ResponseEntity<?> updateProfile(@RequestBody UserProfileRequest request) {
         Optional<User> userOpt = userService.getCurrentUser();
         if (userOpt.isEmpty()) return ResponseEntity.notFound().build();
@@ -50,6 +50,14 @@ public class UserController {
         userService.updateUserProfile(user, request);
 
         userRepository.save(user);
-        return ResponseEntity.ok("User Profile updated successfully!");
+        return ResponseEntity.ok(
+                UserProfileResponse.builder()
+                        .email(user.getEmail())
+                        .category(user.getCategory())
+                        .flavor(user.getFlavor())
+                        .disease(user.getDisease())
+                        .allergy(user.getAllergy())
+                        .build()
+        );
     }
 }

@@ -28,10 +28,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .requiresChannel(channel -> channel.anyRequest().requiresSecure()) // HTTPS 강제 적용
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigSource))
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/").permitAll() // Root 엔드포인트 허용
                         .requestMatchers("/auth/**").permitAll() // 인증 관련 엔드포인트 전면 허용
                         .requestMatchers("/api/recommend/emoji").permitAll() // 이모지 추천 API (로그인 없이 하는 것) 전면 허용
                         .requestMatchers("/api/recipe/**").permitAll()

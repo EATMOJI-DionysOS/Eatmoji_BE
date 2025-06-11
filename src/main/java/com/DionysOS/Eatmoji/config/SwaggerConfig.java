@@ -7,6 +7,7 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import io.swagger.v3.oas.models.servers.Server;
 
 @Configuration
 public class SwaggerConfig {
@@ -29,10 +30,15 @@ public class SwaggerConfig {
         // 보안 설정
         SecurityRequirement securityRequirement = new SecurityRequirement().addList("BearerAuth");
 
+        Server server = new Server()
+                .url("https://3.37.53.72.nip.io")
+                .description("배포 서버");
+
         // 최종 OpenAPI 빌드
         return new OpenAPI()
                 .info(info)
                 .addSecurityItem(securityRequirement)
-                .components(new Components().addSecuritySchemes("BearerAuth", securityScheme));
+                .components(new Components().addSecuritySchemes("BearerAuth", securityScheme))
+                .addServersItem(server);
     }
 }

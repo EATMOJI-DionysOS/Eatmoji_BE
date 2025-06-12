@@ -65,44 +65,4 @@ public class HistoryController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // 추천 결과 저장
-    @PostMapping("/save")
-    public ResponseEntity<List<HistoryResponse>> saveHistory(@RequestBody RecommendResponse response) {
-        List<HistoryResponse> responseList = new ArrayList<>();
-
-        try {
-            for (FoodRecommend rec : response.getRecommendations()) {
-                History history = new History(
-                        userService.getCurrentUserEmail(),
-                        response.getEmotion(),
-                        rec.getFood(),
-                        rec.getReason(),
-                        LocalDateTime.now(),
-                        false
-                );
-
-                History saved = historyRepository.save(history);
-
-                // DTO로 변환
-                HistoryResponse dto = new HistoryResponse();
-                dto.setId(saved.getId());
-                dto.setEmail(saved.getEmail());
-                dto.setEmotion(saved.getEmotion());
-                dto.setCreatedAt(saved.getCreatedAt());
-                dto.setLiked(saved.isLiked());
-
-                FoodRecommend dtoRec = new FoodRecommend();
-                dtoRec.setFood(saved.getFood());
-                dtoRec.setReason(saved.getReason());
-                dto.setRecommendation(dtoRec);
-
-                responseList.add(dto);
-            }
-        } catch (Exception e) {
-            System.err.println("❌ 저장 중 오류 발생:");
-            e.printStackTrace();
-        }
-
-        return ResponseEntity.ok(responseList);
-    }
 }

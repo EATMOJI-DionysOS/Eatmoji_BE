@@ -2,7 +2,8 @@ from fastapi import FastAPI
 from personalized_recommend import router as personalized_router
 from emoji_recommend import router as recommendation_router
 from emoji_recommend_login import router as login_router
-
+from dotenv import load_dotenv
+load_dotenv()
 app = FastAPI()
 
 # 다른 모듈에서 정의된 라우터를 가져와서 연결

@@ -1,9 +1,10 @@
 package com.DionysOS.Eatmoji.service;
 
 import com.DionysOS.Eatmoji.dto.FoodRecommend;
+import com.DionysOS.Eatmoji.dto.HistoryResponse;
 import com.DionysOS.Eatmoji.dto.RecommendResponse;
 
-import com.DionysOS.Eatmoji.model.History;
+import com.DionysOS.Eatmoji.dto.RecommendResponseWithID;
 import com.DionysOS.Eatmoji.repository.HistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

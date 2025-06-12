@@ -2,6 +2,7 @@ package com.DionysOS.Eatmoji.controller;
 
 import com.DionysOS.Eatmoji.dto.EmotionRequest;
 import com.DionysOS.Eatmoji.dto.RecommendResponse;
+import com.DionysOS.Eatmoji.dto.RecommendResponseWithID;
 import com.DionysOS.Eatmoji.model.History;
 import com.DionysOS.Eatmoji.model.User;
 import com.DionysOS.Eatmoji.repository.HistoryRepository;

@@ -28,6 +28,37 @@ public class GptRecommendation {
         this.restTemplate = new RestTemplate();
         this.historyRepository = historyRepository;
     }
+    // 내부 history/save api 호출
+    public String saveRecommendationHistory(String email, String emotion, List<FoodRecommend> recommendations) {
+        RecommendResponse payload = new RecommendResponse();
+        payload.setEmotion(emotion);
+        payload.setRecommendations(recommendations);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<RecommendResponse> request = new HttpEntity<>(payload, headers);
+
+        try {
+            ResponseEntity<HistoryResponse[]> response = restTemplate.postForEntity(
+                    "http://localhost:8080/history/save",
+                    request,
+                    HistoryResponse[].class
+            );
+
+            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null && response.getBody().length > 0) {
+                return response.getBody()[0].getId(); // 첫 번째 History ID만 반환
+            } else {
+                System.out.println("Save failed: " + response.getStatusCode());
+            }
+        } catch (Exception e) {
+            System.err.println("API call failed: :");
+            e.printStackTrace();
+        }
+
+        return ""; // 실패 시 빈 문자열 반환
+    }
+
     @Autowired
     private UserService userService; // 사용자 서비스 주입
 

@@ -1,9 +1,10 @@
 package com.DionysOS.Eatmoji.service;
 
 import com.DionysOS.Eatmoji.dto.FoodRecommend;
+import com.DionysOS.Eatmoji.dto.HistoryResponse;
 import com.DionysOS.Eatmoji.dto.RecommendResponse;
 
-import com.DionysOS.Eatmoji.model.History;
+import com.DionysOS.Eatmoji.dto.RecommendResponseWithID;
 import com.DionysOS.Eatmoji.repository.HistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,28 @@ public class GptRecommendation {
     private final RestTemplate restTemplate;
     private final HistoryRepository historyRepository;
 
+    @Autowired
+    private HistoryService historyService;
+
 
     public GptRecommendation(HistoryRepository historyRepository) {
         this.restTemplate = new RestTemplate();
         this.historyRepository = historyRepository;
     }
+    // 내부 history/save api 호출
+    public String saveRecommendationHistory(String email, String emotion, List<FoodRecommend> recommendations) {
+        try {
+            List<HistoryResponse> responseList = historyService.saveRecommendation(email, emotion, recommendations);
+            if (!responseList.isEmpty()) {
+                return responseList.get(0).getId(); // 첫 번째 히스토리 ID 반환
+            }
+        } catch (Exception e) {
+            System.err.println("❌ 히스토리 저장 실패:");
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     @Autowired
     private UserService userService; // 사용자 서비스 주입
 
@@ -45,43 +63,11 @@ public class GptRecommendation {
                 RecommendResponse.class
         );
 
-        RecommendResponse body = response.getBody();
-        ZonedDateTime nowInKST = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
-        LocalDateTime localKST = nowInKST.toLocalDateTime();
-
-        if (body != null && body.getRecommendations() != null) {
-            for (FoodRecommend rec : body.getRecommendations()) {
-                try {
-                    // ✅ 1. 현재 사용자 이메일 확인 로그
-                    String email = userService.getCurrentUserEmail();
-                    System.out.println("Current user email: " + email);
-
-                    // ✅ 2. History 객체 생성
-                    History history = new History(
-                            email,
-                            emoji,
-                            rec.getFood(),
-                            rec.getReason(),
-                            localKST,
-                            false
-                    );
-
-                    // ✅ 3. 저장 시도 및 확인 로그
-                    History saved = historyRepository.save(history);
-                    System.out.println("Saved history: " + saved);
-                } catch (Exception e) {
-                    // ✅ 4. 예외 로그
-                    System.err.println("Error while saving history:");
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            System.err.println("No recommendation received from GPT.");
-        }
         return response.getBody();
+
     }
 
-    public RecommendResponse getAndSaveEmojiPersonalizedRecommendation(
+    public RecommendResponseWithID getAndSaveEmojiPersonalizedRecommendation(
             String emoji,
             String email,
             List<String> categories,
@@ -116,24 +102,17 @@ public class GptRecommendation {
 
 
         RecommendResponse body = response.getBody();
-        if (body != null && body.getRecommendations() != null) {
-            ZonedDateTime nowInKST = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
-            LocalDateTime localKST = nowInKST.toLocalDateTime();
-            for (FoodRecommend rec : body.getRecommendations()) {
-                History history = new History(
-                        email,
-                        emoji,
-                        rec.getFood(),
-                        rec.getReason(),
-                        localKST,
-                        false
-                );
-                historyRepository.save(history);
-            }
-        }
-        return body;
+        assert body != null;
+        String id = saveRecommendationHistory(email, body.getEmotion(), body.getRecommendations());
+        RecommendResponseWithID result = new RecommendResponseWithID();
+        result.setEmotion(body.getEmotion());
+        result.setRecommendations(body.getRecommendations());
+        result.setHistoryId(id);
+
+        return result;
     }
-    public RecommendResponse getAndSavePersonalizedRecommendation(String email,
+
+    public RecommendResponseWithID getAndSavePersonalizedRecommendation(String email,
                                                                   List<String> categories,
                                                                   List<String> flavors,
                                                                   List<String> diseases,
@@ -167,32 +146,16 @@ public class GptRecommendation {
         ZonedDateTime nowInKST = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         LocalDateTime localKST = nowInKST.toLocalDateTime();
 
-        // 3. 결과 저장
-        if (body != null && body.getRecommendations() != null) {
-            for (FoodRecommend rec : body.getRecommendations()) {
-                try {
-                    // 추천된 음식마다 DB 저장
-                    History history = new History(
-                            email,
-                            "\uD83D\uDC38오메추",
-                            rec.getFood(),
-                            rec.getReason(),
-                            localKST,
-                            false
-                    );
 
-                    History saved = historyRepository.save(history);
-                    System.out.println("Saved personalized history: " + saved);
-                } catch (Exception e) {
-                    System.err.println("Error while saving personalized history:");
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            System.err.println("No personalized recommendation received from GPT.");
-        }
+        assert body != null;
+        String id = saveRecommendationHistory(email, body.getEmotion(), body.getRecommendations());
+        RecommendResponseWithID result = new RecommendResponseWithID();
+        result.setEmotion(body.getEmotion());
+        result.setRecommendations(body.getRecommendations());
+        result.setHistoryId(id);
 
-        return body;
+        return result;
+
     }
 
 

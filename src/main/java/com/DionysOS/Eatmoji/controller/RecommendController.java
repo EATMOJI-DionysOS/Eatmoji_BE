@@ -2,6 +2,7 @@ package com.DionysOS.Eatmoji.controller;
 
 import com.DionysOS.Eatmoji.dto.EmotionRequest;
 import com.DionysOS.Eatmoji.dto.RecommendResponse;
+import com.DionysOS.Eatmoji.dto.RecommendResponseWithID;
 import com.DionysOS.Eatmoji.model.History;
 import com.DionysOS.Eatmoji.model.User;
 import com.DionysOS.Eatmoji.repository.HistoryRepository;
@@ -37,7 +38,7 @@ public class RecommendController {
         return response;
     }
     @PostMapping("/emoji/login")
-    public RecommendResponse loginRecommend(@RequestBody EmotionRequest request) {
+    public RecommendResponseWithID loginRecommend(@RequestBody EmotionRequest request) {
         String emoji = request.getEmoji();
 
         // 🟢 로그인한 사용자 이메일
@@ -64,7 +65,7 @@ public class RecommendController {
     }
 
     @PostMapping("/personalized")
-    public RecommendResponse recommendPersonalized() {
+    public RecommendResponseWithID recommendPersonalized() {
         String email = userService.getCurrentUserEmail();
 
         List<History> likedHistories = historyRepository.findLikedFoodsByEmail(email);
@@ -79,7 +80,7 @@ public class RecommendController {
         List<String> flavors = profile.get().getFlavor();
         List<String> diseases = profile.get().getDisease();
         List<String> allergies = profile.get().getAllergy();
-        RecommendResponse response = recommendationService.getAndSavePersonalizedRecommendation(
+        RecommendResponseWithID response = recommendationService.getAndSavePersonalizedRecommendation(
                 email, categories, flavors, diseases, allergies, likedFoods
         );
         return response;

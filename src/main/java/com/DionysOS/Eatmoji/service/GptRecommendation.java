@@ -174,7 +174,7 @@ public class GptRecommendation {
                     // 추천된 음식마다 DB 저장
                     History history = new History(
                             email,
-                            "personalized",  // 이모지 대신 'personalized'로
+                            "\uD83D\uDC38오메추",
                             rec.getFood(),
                             rec.getReason(),
                             localKST,

@@ -24,7 +24,7 @@ Eatmoji는 감정 상황을 이모지로 선택하면, 이어 맞는 음식을 �
 * 😊 감정 이모지를 데이터셋을 이용하여 감정과 점수로 변환
 * 🍽️ 프롬프트에 따른 감정기반/사용자 맞춤 음식 추천
 * 📍 Recipe 데이터셋을 이용한 음식 조리 레시피 검색 및 링크 전달
-* ⭐ 추천 결과 좋아요 사용지 프로필 저장
+* ⭐ 추천 결과 좋아요 및 사용자 프로필 저장
 
 </br>
 
@@ -133,7 +133,9 @@ EATMOJI_BE/
 ## 🤝 가이드
 
 * Pull Request 전에는 반드시 [CONTRIBUTING.md](CONTRIBUTING.MD)를 확인해주세요.
+  <br/>
   - 브랜치 전략 및 PR 리뷰 프로세스가 설명되어 있습니다.
+  <br/>
 * 커밋 메시지는 [Conventional Commits](https://www.conventionalcommits.org/) 형식을 권장합니다.
 
 

@@ -44,7 +44,7 @@ public class History {
         this.food = food;
         this.reason = reason;
         this.createdAt = createdAt;
-        this.isLiked = isLiked();
+        this.isLiked = isLiked;
     }
 
 

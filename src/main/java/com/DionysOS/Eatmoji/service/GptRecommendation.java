@@ -81,7 +81,7 @@ public class GptRecommendation {
 
     }
 
-    public RecommendResponse getAndSaveEmojiPersonalizedRecommendation(
+    public RecommendResponseWithID getAndSaveEmojiPersonalizedRecommendation(
             String emoji,
             String email,
             List<String> categories,
@@ -116,24 +116,17 @@ public class GptRecommendation {
 
 
         RecommendResponse body = response.getBody();
-        if (body != null && body.getRecommendations() != null) {
-            ZonedDateTime nowInKST = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
-            LocalDateTime localKST = nowInKST.toLocalDateTime();
-            for (FoodRecommend rec : body.getRecommendations()) {
-                History history = new History(
-                        email,
-                        emoji,
-                        rec.getFood(),
-                        rec.getReason(),
-                        localKST,
-                        false
-                );
-                historyRepository.save(history);
-            }
-        }
-        return body;
+        assert body != null;
+        String id = saveRecommendationHistory(email, body.getEmotion(), body.getRecommendations());
+        RecommendResponseWithID result = new RecommendResponseWithID();
+        result.setEmotion(body.getEmotion());
+        result.setRecommendations(body.getRecommendations());
+        result.setHistoryId(id);
+
+        return result;
     }
-    public RecommendResponse getAndSavePersonalizedRecommendation(String email,
+
+    public RecommendResponseWithID getAndSavePersonalizedRecommendation(String email,
                                                                   List<String> categories,
                                                                   List<String> flavors,
                                                                   List<String> diseases,
@@ -167,32 +160,16 @@ public class GptRecommendation {
         ZonedDateTime nowInKST = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         LocalDateTime localKST = nowInKST.toLocalDateTime();
 
-        // 3. 결과 저장
-        if (body != null && body.getRecommendations() != null) {
-            for (FoodRecommend rec : body.getRecommendations()) {
-                try {
-                    // 추천된 음식마다 DB 저장
-                    History history = new History(
-                            email,
-                            "\uD83D\uDC38오메추",
-                            rec.getFood(),
-                            rec.getReason(),
-                            localKST,
-                            false
-                    );
 
-                    History saved = historyRepository.save(history);
-                    System.out.println("Saved personalized history: " + saved);
-                } catch (Exception e) {
-                    System.err.println("Error while saving personalized history:");
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            System.err.println("No personalized recommendation received from GPT.");
-        }
+        assert body != null;
+        String id = saveRecommendationHistory(email, body.getEmotion(), body.getRecommendations());
+        RecommendResponseWithID result = new RecommendResponseWithID();
+        result.setEmotion(body.getEmotion());
+        result.setRecommendations(body.getRecommendations());
+        result.setHistoryId(id);
 
-        return body;
+        return result;
+
     }
 
 

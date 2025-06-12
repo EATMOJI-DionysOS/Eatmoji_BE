@@ -42,6 +42,7 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           source: "build/libs/*.jar"
           target: "~/app"
+          rm: 'true'
           overwrite: 'true'
 
       - name: Restart Spring Boot using SSH

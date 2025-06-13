@@ -45,9 +45,6 @@ public class GptRecommendation {
         return "";
     }
 
-    @Autowired
-    private UserService userService; // 사용자 서비스 주입
-
     public RecommendResponse printRecommendation(String emoji) {
         Map<String, String> requestBody = Map.of("emoji", emoji);
 
@@ -76,6 +73,11 @@ public class GptRecommendation {
             List<String> allergies,
             List<String> likedFoods
     ) {
+
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("❌ 이메일이 null 또는 빈 문자열입니다.");
+        }
+
         // FastAPI 요청 body 구성
         Map<String, Object> requestBody = Map.of(
                 "emoji", emoji,
@@ -100,10 +102,26 @@ public class GptRecommendation {
                 RecommendResponse.class
         );
 
+        if (response.getBody() == null) {
+            throw new RuntimeException("GPT 응답이 null입니다.");
+        }
+
 
         RecommendResponse body = response.getBody();
-        assert body != null;
-        String id = saveRecommendationHistory(email, body.getEmotion(), body.getRecommendations());
+
+        if (body.getRecommendations() == null || body.getRecommendations().isEmpty()) {
+            throw new RuntimeException("GPT 응답의 추천 리스트가 비어있습니다.");
+        }
+
+
+        String id = "";
+        try {
+            id = saveRecommendationHistory(email, body.getEmotion(), body.getRecommendations());
+        } catch (Exception e) {
+            System.err.println("❌ 히스토리 저장 중 오류:");
+            e.printStackTrace();
+        }
+
         RecommendResponseWithID result = new RecommendResponseWithID();
         result.setEmotion(body.getEmotion());
         result.setRecommendations(body.getRecommendations());
@@ -118,6 +136,11 @@ public class GptRecommendation {
                                                                   List<String> diseases,
                                                                   List<String> allergies,
                                                                   List<String> likedFoods) {
+
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("❌ 이메일이 null이거나 빈 문자열입니다.");
+        }
+
         // 1. GPT API 요청 데이터
         Map<String, Object> requestBody = Map.of(
                 "email", email,
@@ -133,22 +156,40 @@ public class GptRecommendation {
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
-        // 2. GPT API 호출
-        String personalizedUrl = "http://localhost:8000/gpt/recommend/personalized";
-        ResponseEntity<RecommendResponse> response = restTemplate.exchange(
-                personalizedUrl,
-                HttpMethod.POST,
-                entity,
-                RecommendResponse.class
-        );
+        RecommendResponse body;
+        try {
+            // 2. GPT API 호출
+            String personalizedUrl = "http://localhost:8000/gpt/recommend/personalized";
+            ResponseEntity<RecommendResponse> response = restTemplate.exchange(
+                    personalizedUrl,
+                    HttpMethod.POST,
+                    entity,
+                    RecommendResponse.class
+            );
 
-        RecommendResponse body = response.getBody();
-        ZonedDateTime nowInKST = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
-        LocalDateTime localKST = nowInKST.toLocalDateTime();
+            body = response.getBody();
+            if (body == null) {
+                throw new RuntimeException("❌ GPT 응답이 null입니다.");
+            }
+            if (body.getRecommendations() == null || body.getRecommendations().isEmpty()) {
+                throw new RuntimeException("❌ GPT 응답의 추천 리스트가 비어있습니다.");
+            }
+        } catch (Exception e) {
+            System.err.println("❌ GPT Personalized API 호출 실패:");
+            e.printStackTrace();
+            throw new RuntimeException("GPT Personalized API 호출 실패", e);
+        }
 
+        // 3. 히스토리 저장
+        String id = "";
+        try {
+            id = saveRecommendationHistory(email, body.getEmotion(), body.getRecommendations());
+        } catch (Exception e) {
+            System.err.println("❌ 히스토리 저장 중 오류:");
+            e.printStackTrace();
+        }
 
-        assert body != null;
-        String id = saveRecommendationHistory(email, body.getEmotion(), body.getRecommendations());
+        // 4. 최종 응답 구성
         RecommendResponseWithID result = new RecommendResponseWithID();
         result.setEmotion(body.getEmotion());
         result.setRecommendations(body.getRecommendations());
@@ -157,7 +198,5 @@ public class GptRecommendation {
         return result;
 
     }
-
-
 
 }

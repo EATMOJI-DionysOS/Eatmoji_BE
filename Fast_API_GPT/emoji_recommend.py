@@ -6,6 +6,7 @@ from langchain_openai import ChatOpenAI  # 변경된 부분
 import os
 import json
 
+
 router = APIRouter()
 
 # ChatGPT 기반 LLM 초기화

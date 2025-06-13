@@ -5,7 +5,6 @@ from langchain.chains import LLMChain
 from langchain_openai import ChatOpenAI
 import os
 
-
 router = APIRouter()
 
 # ChatGPT 기반 LLM 초기화

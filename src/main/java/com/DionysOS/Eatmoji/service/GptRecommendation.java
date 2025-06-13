@@ -116,7 +116,7 @@ public class GptRecommendation {
 
         String id = "";
         try {
-            id = saveRecommendationHistory(email, body.getEmotion(), body.getRecommendations());
+            id = saveRecommendationHistory(email, emoji, body.getRecommendations());
         } catch (Exception e) {
             System.err.println("❌ 히스토리 저장 중 오류:");
             e.printStackTrace();
@@ -183,7 +183,7 @@ public class GptRecommendation {
         // 3. 히스토리 저장
         String id = "";
         try {
-            id = saveRecommendationHistory(email, body.getEmotion(), body.getRecommendations());
+            id = saveRecommendationHistory(email, "\uD83D\uDC38오메추", body.getRecommendations());
         } catch (Exception e) {
             System.err.println("❌ 히스토리 저장 중 오류:");
             e.printStackTrace();

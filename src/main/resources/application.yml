@@ -29,4 +29,4 @@ springdoc:
 
 # jwt Token 설정
 jwt:
-    secret: ${JWT_SECRET}
+    secret: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

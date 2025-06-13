@@ -5,7 +5,8 @@ from langchain.chains import LLMChain
 from langchain_openai import ChatOpenAI  # 변경된 부분
 import os
 import json
-
+from dotenv import load_dotenv
+load_dotenv()
 
 router = APIRouter()
 

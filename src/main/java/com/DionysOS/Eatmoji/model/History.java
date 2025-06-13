@@ -38,13 +38,13 @@ public class History {
     @NotNull
     private boolean isLiked = false;
 
-    public History(String email, String emotion, String food, String reason, LocalDateTime createdAt, boolean isLiked) {
+    public History(String email, String emotion, String food, String reason, LocalDateTime createdAt, Boolean isLiked) {
         this.email = email;
         this.emotion = emotion;
         this.food = food;
         this.reason = reason;
         this.createdAt = createdAt;
-        this.isLiked = isLiked;
+        this.isLiked = (isLiked != null) ? isLiked : false; // null-safe 처리
     }
 
 

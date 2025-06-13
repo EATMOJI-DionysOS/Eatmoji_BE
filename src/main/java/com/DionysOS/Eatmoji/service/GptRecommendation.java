@@ -123,7 +123,7 @@ public class GptRecommendation {
         }
 
         RecommendResponseWithID result = new RecommendResponseWithID();
-        result.setEmotion(body.getEmotion());
+        result.setEmotion(emoji);
         result.setRecommendations(body.getRecommendations());
         result.setHistoryId(id);
 

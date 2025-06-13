@@ -191,7 +191,7 @@ public class GptRecommendation {
 
         // 4. 최종 응답 구성
         RecommendResponseWithID result = new RecommendResponseWithID();
-        result.setEmotion(body.getEmotion());
+        result.setEmotion("\uD83D\uDC38오메추");
         result.setRecommendations(body.getRecommendations());
         result.setHistoryId(id);
 

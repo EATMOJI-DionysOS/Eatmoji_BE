@@ -6,8 +6,7 @@ from langchain_openai import ChatOpenAI
 import os
 import json
 
-from dotenv import load_dotenv
-load_dotenv()
+
 
 router = APIRouter()
 

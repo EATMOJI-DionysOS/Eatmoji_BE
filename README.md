@@ -45,18 +45,20 @@ Eatmoji는 감정 상황을 이모지로 선택하면, 이어 맞는 음식을 �
 
 ```bash
 # 1️⃣ Spring Boot
-./gradlew build
-java -jar build/libs/Eatmoji-0.0.1-SNAPSHOT.jar
+Java SDK 17버전 설정.
+./gradlew bootRun
 
 > 기본 포트는 `http://localhost:8080` 입니다.
 
 # 2️⃣ FastAPI
 Fast_API_GPT 폴더에 .env파일 생성
 .env 파일에 개인 OPEN_API_KEY 발급 후 추가
-change_to_json을 제외한 py파일에 다음 내용 추가
+change_to_json, main을 제외한 py파일에 다음 내용 추가
 
 from dotenv import load_dotenv
 load_dotenv()
+
+이후 서버 실행 방법:
 
 cd Fast_API_GPT
 pip install -r requirements.txt

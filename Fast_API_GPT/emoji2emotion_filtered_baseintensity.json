@@ -11,9 +11,17 @@
     "emotion": "joy",
     "intensity": 0.704
   },
+  "😉": {
+    "emotion": "joy",
+    "intensity": 0.563
+  },
   "😒": {
     "emotion": "anger",
     "intensity": 0.591
+  },
+  "😜": {
+    "emotion": "joy",
+    "intensity": 0.567
   },
   "😡": {
     "emotion": "anger",
@@ -38,6 +46,10 @@
   "😥": {
     "emotion": "sad",
     "intensity": 0.66
+  },
+  "😕": {
+    "emotion": "anger",
+    "intensity": 0.603
   },
   "😑": {
     "emotion": "anger",
